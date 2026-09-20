@@ -43,6 +43,20 @@
 .getting .list{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem 2.5rem;margin-top:2.4rem}
 .getting .list h3{font-size:.85rem;letter-spacing:.14em;margin-bottom:.7rem}
 .getting .list p{font-size:.95rem;color:var(--ink-2)}
+.approach{display:grid;grid-template-columns:1.15fr .55fr 1fr;gap:2rem 2.5rem;margin-top:3.2rem;padding-top:2.6rem;border-top:1px solid var(--line,rgba(0,0,0,.1));align-items:start}
+.approach h3{font-size:.85rem;letter-spacing:.14em;margin-bottom:.9rem}
+.approach p{font-size:.95rem;color:var(--ink-2);margin:0 0 .8rem}
+.approach .warn{color:var(--ink);font-weight:500}
+.approach ol{margin:.4rem 0 0;padding-left:1.3rem;font-size:.95rem;color:var(--ink-2);display:grid;gap:.45rem}
+.approach figure{margin:0}
+.approach .photo{border-radius:var(--radius,18px);overflow:hidden}
+.approach .photo img{display:block;width:100%;height:100%;object-fit:cover}
+.approach .photo.map{aspect-ratio:320/581}
+.approach figure:last-child .photo{aspect-ratio:4/3}
+.approach figcaption{font-family:var(--ff-script);color:var(--strap-ink);font-size:1.2rem;margin-top:.6rem}
+section.tiles-sec{padding-top:0}
+.tiles-sec .tiles{margin-top:0}
+p.center{max-width:none}
 /* practical */
 .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:2.6rem}
 .tile{background:var(--paper);border-radius:14px;padding:1.5rem 1.5rem 1.6rem}
@@ -64,11 +78,13 @@
   .facts .row{grid-template-columns:repeat(2,1fr)}
   .room{grid-template-columns:1fr} .room:nth-child(even) .txt{order:0}
   .plain-truths .grid,.tiles,.getting .list{grid-template-columns:1fr 1fr}
+  .approach{grid-template-columns:1fr 1fr} .approach .txt{grid-column:1/-1}
   .village .grid,.daily .grid,.contact .grid{grid-template-columns:1fr}
   .places{grid-template-columns:1fr 1fr}
 }
 @media (max-width:640px){
-  .plain-truths .grid,.tiles,.getting .list,.places{grid-template-columns:1fr}
+  .plain-truths .grid,.tiles,.getting .list,.places,.approach{grid-template-columns:1fr}
+  .approach .photo.map{max-width:280px}
   .mosaic{grid-template-columns:1fr 1fr}
   .mosaic .photo:first-child{grid-column:1/3;grid-row:1;aspect-ratio:3/2;min-height:0}
 }

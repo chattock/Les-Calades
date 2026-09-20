@@ -10,6 +10,8 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = T(lang);
 const page = 'practical';
+const VIVAL = 'https://vival.casino.fr/stores/E6323/ledenon-1-rue-letino';
+const PIZZA = 'https://www.google.com/maps/search/?api=1&query=L%C3%A9denon+Pizza%2C+7+chemin+de+l%27Amandier%2C+30210+L%C3%A9denon';
 ---
 <Base lang={lang} page={page} title={t('Infos pratiques · Les Calades', 'Practical information · Les Calades')} description={t('Arrivée, départ, parking, la piscine, les courses, et comment nous joindre.', 'Check-in, check-out, parking, the pool, shopping, and how to reach us.')}>
   <header class="masthead" id="top">
@@ -20,19 +22,19 @@ const page = 'practical';
     <div class="rv">
       <h2>{t(`Infos pratiques`,`Practical information`)}</h2>
       <p class="strap">{t(`avant de venir, et pendant le séjour`,`before you come, and while you are here`)}</p>
-      <p class="lede">{t(`Tout ce qu'il faut savoir tient sur cette page. Le reste, Laure vous le dit à l'arrivée, avec les clés.`,`Everything you need to know fits on this page. The rest, Laure tells you when she hands over the keys.`)}</p>
     </div>
   </div>
 </div></section>
 
-<section class="daily" id="info"><div class="wrap">
+<section class="daily tiles-sec" id="info"><div class="wrap">
   <div class="tiles">
     <div class="tile rv"><h3>{t(`Arrivée et départ`,`Check-in and check-out`)}</h3>
       <p>{t(`Arrivée à partir de 17 h. Laure vous attend à la maison avec les clés, vous fait visiter et répond à vos questions.`,`Check-in from 5 pm. Laure meets you at the house with the keys, shows you round and answers your questions.`)}</p>
       <p>{t(`Départ avant 11 h, pour laisser le temps de préparer la maison pour les suivants.`,`Check-out by 11 am, to leave time to get the house ready for the next guests.`)}</p>
       <p class="script">{t(`2 rue du Réservoir, 30210 Lédenon`,`2 rue du Réservoir, 30210 Lédenon`)}</p></div>
     <div class="tile rv" style="--i:1"><h3>{t(`Le parking`,`Parking`)}</h3>
-      <p>{t(`Un parking privé fermé pour trois voitures, et une place privée dehors pour une quatrième. Les ruelles du village sont étroites : on vous explique l'accès avant l'arrivée.`,`A private, gated car park for three cars, and a private space outside for a fourth. The village lanes are narrow: we explain the approach before you arrive.`)}</p></div>
+      <p>{t(`Un parking privé fermé pour trois voitures, et une place privée dehors pour une quatrième. Les ruelles du village sont étroites : ne suivez pas le GPS, suivez notre plan.`,`A private, gated car park for three cars, and a private space outside for a fourth. The village lanes are narrow: do not follow the GPS, follow our map.`)}</p>
+      <p><a href={urls.area[lang] + '#acces'}>{t(`Le plan d'accès`,`The approach, with a map`)}</a></p></div>
     <div class="tile rv" style="--i:2"><h3>{t(`La piscine`,`The pool`)}</h3>
       <p>{t(`Privée, rien qu'à vous, mais pas surveillée. À l'arrivée, un adulte signe une décharge de responsabilité. Les enfants restent sous la garde des adultes du groupe.`,`Private and yours alone, but not lifeguarded. At check-in one adult signs a liability waiver. Children stay in the care of the adults in the party.`)}</p></div>
     <div class="tile rv"><h3>{t(`La maison`,`The house`)}</h3>
@@ -43,7 +45,8 @@ const page = 'practical';
         <li>{t(`Deux cuisines, un barbecue dans la cour du pool house.`,`Two kitchens, and a barbecue in the pool house courtyard.`)}</li>
       </ul></div>
     <div class="tile rv" style="--i:1"><h3>{t(`Les courses`,`Shopping`)}</h3>
-      <p>{t(`Les supermarchés les plus proches sont à Remoulins et à Marguerittes, à dix minutes. Le marché d'Uzès le samedi matin vaut le détour, les Halles de Nîmes tous les jours.`,`The nearest supermarkets are in Remoulins and Marguerittes, ten minutes away. The Uzès market on Saturday morning is worth the trip, and the covered market in Nîmes is open every day.`)}</p>
+      <p>{t(`Le `,`The `)}<a href={VIVAL} rel="noopener">{t(`Vival`,`Vival`)}</a>{t(`, au cœur du village (1 rue Letino), pour le pain et le quotidien. Les grands supermarchés sont à Remoulins et à Marguerittes, à dix minutes. Le marché d'Uzès le samedi matin vaut le détour, les Halles de Nîmes tous les jours.`,`, in the heart of the village (1 rue Letino), for bread and everyday shopping. The big supermarkets are in Remoulins and Marguerittes, ten minutes away. The Uzès market on Saturday morning is worth the trip, and the covered market in Nîmes is open every day.`)}</p>
+      <p>{t(`Le soir, `,`In the evening, `)}<a href={PIZZA} rel="noopener">Lédenon Pizza</a>{t(` (7 chemin de l'Amandier, du jeudi au dimanche) est particulièrement bonne.`,` (7 chemin de l'Amandier, Thursday to Sunday) is particularly good.`)}</p>
       <p><a href={urls.area[lang]}>{t(`Plus sur les alentours`,`More about the area`)}</a></p></div>
     <div class="tile rv" style="--i:2"><h3>{t(`Avant de partir`,`Before you leave`)}</h3>
       <ul>

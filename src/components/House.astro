@@ -26,7 +26,7 @@ const rooms = [
     pfr: `Un lit à baldaquin en fer forgé sous les poutres, une armoire en pin, la climatisation, et une salle d'eau juste à côté.`,
     pen: `A wrought-iron four-poster under the beams, a pine wardrobe, air conditioning, and a shower room right next door.`,
     bfr: ['un grand lit à baldaquin', 'salle d’eau attenante'], ben: ['one double four-poster', 'shower room next door'], ph: [24, 25, 22] },
-  { g: 'fireplace', fr: 'La chambre à la cheminée', en: 'The fireplace room', sfr: 'des courtepointes rouges et un vieux bureau', sen: 'red quilts and an old desk',
+  { g: 'fireplace', fr: 'La salle de séjour', en: 'The salle de séjour', sfr: 'des courtepointes rouges et un vieux bureau', sen: 'red quilts and an old desk',
     pfr: `Un lit queen et un lit simple à côté, des courtepointes provençales, et une vieille cheminée aux armoiries devant laquelle on peut travailler.`,
     pen: `A queen bed with a single beside it, Provençal quilts, and an old fireplace with coats of arms that makes a fine place to work.`,
     bfr: ['un lit queen', 'un lit simple'], ben: ['one queen bed', 'one single bed'], ph: [16, 17, 15] },
@@ -45,7 +45,7 @@ const rooms = [
     pen: `Olive trees in the courtyard, vaulted passages, and the calades, the stone-paved lanes that give the house its name. It is all steps and stairs, which is the charm of the village and worth knowing before you come.`, ph: [58, 47, 43] },
 ];
 ---
-<Base lang={lang} page={page} title={t('La maison · Les Calades', 'The house · Les Calades')} description={t('Quatre chambres, cinq salles de bain, deux cuisines, des terrasses et une piscine privée : la maison pièce par pièce.', 'Four bedrooms, five bathrooms, two kitchens, terraces and a private pool: the house room by room.')}>
+<Base lang={lang} page={page} title={t('La maison · Les Calades', 'The house · Les Calades')} description={t('Quatre chambres, trois salles de bain, deux cuisines, des terrasses et une piscine privée : la maison pièce par pièce.', 'Four bedrooms, three bathrooms, two kitchens, terraces and a private pool: the house room by room.')}>
   <header class="masthead" id="top">
     <Nav lang={lang} page={page} />
   </header>
@@ -63,7 +63,7 @@ const rooms = [
   <div class="row rv">
     <div><b>10</b><span>{t(`personnes au plus`,`guests at most`)}</span></div>
     <div><b>4</b><span>{t(`chambres, toutes climatisées`,`bedrooms, all air-conditioned`)}</span></div>
-    <div><b>5</b><span>{t(`salles de bain`,`bathrooms`)}</span></div>
+    <div><b>3</b><span>{t(`salles de bain, et un WC en plus`,`bathrooms, plus a separate toilet`)}</span></div>
     <div><b>2</b><span>{t(`cuisines, dont celle du pool house`,`kitchens, one in the pool house`)}</span></div>
   </div>
   <ul class="chips rv" style="--i:1">
