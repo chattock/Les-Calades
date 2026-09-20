@@ -31,9 +31,15 @@ const home = page === 'home' ? '' : urls.home[lang]; // anchors stay on the home
     var track=row.querySelector('.track'); track.innerHTML+=track.innerHTML;
     var cards=track.querySelectorAll('.card'); for(var k=cards.length/2;k<cards.length;k++){ cards[k].setAttribute('aria-hidden','true'); cards[k].tabIndex=-1; }
     var drag=false, moved=0, sx=0, sl=0, hit=null;
+    /* open on the pool card with its two neighbours centred, the last card peeking in from the left */
+    var touched=false;
+    function center(){ var c=track.querySelector('.card'), cw=c.getBoundingClientRect().width, gap=parseFloat(getComputedStyle(track).columnGap||getComputedStyle(track).gap)||0, vw=row.clientWidth;
+      var n=Math.max(1,Math.min(3,Math.floor((vw+gap)/(cw+gap)))), group=n*cw+(n-1)*gap;
+      row.scrollLeft=cards[cards.length/2].offsetLeft-(vw-group)/2; /* the second copy of the pool card, so the cards before it exist */ }
+    center(); window.addEventListener('resize',function(){ if(!touched) center(); });
     function halfW(){ return track.scrollWidth/2; }
     function wrap(){ var h=halfW(); if(row.scrollLeft>=h) row.scrollLeft-=h; else if(row.scrollLeft<0) row.scrollLeft+=h; }
-    row.addEventListener('pointerdown',function(e){ if(e.pointerType==='mouse'&&e.button!==0) return; drag=true; moved=0; sx=e.clientX; sl=row.scrollLeft; hit=e.target.closest?e.target.closest('.card'):null; row.classList.add('dragging'); row.setPointerCapture(e.pointerId); });
+    row.addEventListener('pointerdown',function(e){ if(e.pointerType==='mouse'&&e.button!==0) return; touched=true; drag=true; moved=0; sx=e.clientX; sl=row.scrollLeft; hit=e.target.closest?e.target.closest('.card'):null; row.classList.add('dragging'); row.setPointerCapture(e.pointerId); });
     row.addEventListener('pointermove',function(e){ if(!drag) return; var d=e.clientX-sx; moved=Math.max(moved,Math.abs(d)); row.scrollLeft=sl-d; wrap(); });
     function end(e){ var tap=drag&&moved<=6&&hit&&e.type==='pointerup'; drag=false; row.classList.remove('dragging'); if(tap&&window.__openGallery){ window.__openGallery(hit.getAttribute('data-gallery'),0); } hit=null; }
     row.addEventListener('pointerup',end); row.addEventListener('pointercancel',end);
