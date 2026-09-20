@@ -40,7 +40,7 @@ The owner page (`/proprietaire/`, `/en/owner/`) asks for the password, keeps it 
 Settings on Netlify (Site configuration → Environment variables), never in the code:
 
 - `OWNER_PASSWORD`: the owner area password.
-- `AIRBNB_ICAL_URL`: the export link from Airbnb (Calendar → Availability settings → Connect calendars → Export).
+- `AIRBNB_ICAL_URL`: the export link from Airbnb (Calendar → Availability settings → Connect calendars → Export). Set on Netlify on 2026-09-20 as a secret, functions scope. A change to it needs a new deploy before the function sees it.
 
 To run the functions on a machine without Netlify, set `LC_LOCAL_STORE=<a directory>` and the stores become JSON files there.
 
@@ -48,4 +48,4 @@ To run the functions on a machine without Netlify, set `LC_LOCAL_STORE=<a direct
 
 - Minimum stays from PriceLabs on a schedule, instead of `src/data/pricelabs.json` refreshed at build time.
 - Live rating and review count from Airbnb.
-- The registration number (meublé de tourisme) in the footer, and the site's domain in `astro.config.mjs` (`site`) for absolute hreflang links.
+- The registration number (meublé de tourisme) in the footer. The domain is maisonlescalades.com (bought 2026-09-20, to be attached to the Netlify site under Domain management); once it resolves, set `site: 'https://maisonlescalades.com'` in `astro.config.mjs` for absolute hreflang links and re-paste the feed address in Airbnb.
