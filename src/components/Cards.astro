@@ -13,6 +13,7 @@ const home = page === 'home' ? '' : urls.home[lang]; // anchors stay on the home
     <p class="strap">{t(`dix personnes, quatre chambres, et la piscine à vous`,`ten of you, four bedrooms, and the pool to yourselves`)}</p>
     <p class="lede">{t(`Une maison de village en pierre, des terrasses privées, et tout ce qu'il faut pour se sentir chez soi.`,`A stone village house, private terraces, and everything you need to feel at home.`)}</p>
   </div>
+  <div class="cards-nav"><button class="arr" type="button" id="cardsPrev" aria-label="Previous rooms"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button><button class="arr" type="button" id="cardsNext" aria-label="Next rooms"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button></div>
   <div class="cards"><div class="track">
     <a class="card rv" style="--i:1" href="#gallery" data-gallery="pool"><img src="/img/2.jpg" alt="The pool lengthways between stone walls and a cypress" loading="lazy"><div class="t"><h3>{t(`La piscine`,`The pool`)}</h3><p>{t(`Derrière ses propres murs, au soleil toute la journée, avec le château au-dessus.`,`Behind its own walls, in the sun all day, with the château above.`)}</p></div></a>
     <a class="card rv" style="--i:2" href="#gallery" data-gallery="kitchen"><img src="/img/28.jpg" alt="Farmhouse kitchen with an oak dresser and round table" loading="lazy"><div class="t"><h3>{t(`La cuisine`,`The kitchen`)}</h3><p>{t(`Une cuisine de ferme avec son vaisselier et une table ronde au milieu.`,`A farmhouse kitchen with an oak dresser and a round table in the middle.`)}</p></div></a>
@@ -26,27 +27,30 @@ const home = page === 'home' ? '' : urls.home[lang]; // anchors stay on the home
   </div></div>
   <script is:inline>
   (function(){
-    /* like the room-by-room row but still until touched: drags, loops, and a tap opens the card's photos */
+    /* three cards in view; the arrows go round in both directions, from the very first press */
     var row=document.querySelector('.made .cards'); if(!row) return;
-    var track=row.querySelector('.track'); track.innerHTML+=track.innerHTML;
-    var cards=track.querySelectorAll('.card'); for(var k=cards.length/2;k<cards.length;k++){ cards[k].setAttribute('aria-hidden','true'); cards[k].tabIndex=-1; }
-    var drag=false, moved=0, sx=0, sl=0, hit=null;
-    /* open on the pool card with its two neighbours centred, the last card peeking in from the left */
-    var touched=false;
-    function center(){ var c=track.querySelector('.card'), cw=c.getBoundingClientRect().width, gap=parseFloat(getComputedStyle(track).columnGap||getComputedStyle(track).gap)||0, vw=row.clientWidth;
-      var n=Math.max(1,Math.min(3,Math.floor((vw+gap)/(cw+gap)))), group=n*cw+(n-1)*gap;
-      row.scrollLeft=cards[cards.length/2].offsetLeft-(vw-group)/2; /* the second copy of the pool card, so the cards before it exist */ }
-    center(); window.addEventListener('resize',function(){ if(!touched) center(); });
-    function halfW(){ return track.scrollWidth/2; }
-    function wrap(){ var h=halfW(); if(row.scrollLeft>=h) row.scrollLeft-=h; else if(row.scrollLeft<0) row.scrollLeft+=h; }
-    row.addEventListener('pointerdown',function(e){ if(e.pointerType==='mouse'&&e.button!==0) return; touched=true; drag=true; moved=0; sx=e.clientX; sl=row.scrollLeft; hit=e.target.closest?e.target.closest('.card'):null; row.classList.add('dragging'); row.setPointerCapture(e.pointerId); });
-    row.addEventListener('pointermove',function(e){ if(!drag) return; var d=e.clientX-sx; moved=Math.max(moved,Math.abs(d)); row.scrollLeft=sl-d; wrap(); });
-    function end(e){ var tap=drag&&moved<=6&&hit&&e.type==='pointerup'; drag=false; row.classList.remove('dragging'); if(tap&&window.__openGallery){ window.__openGallery(hit.getAttribute('data-gallery'),0); } hit=null; }
-    row.addEventListener('pointerup',end); row.addEventListener('pointercancel',end);
-    row.addEventListener('scroll',function(){ if(!drag) wrap(); },{passive:true});
-    row.addEventListener('dragstart',function(e){ e.preventDefault(); }); /* the cards are links, and a link's native drag would cancel ours */
-    /* a pointer tap is handled above; a keyboard Enter on a card still reaches the gallery handler */
-    row.addEventListener('click',function(e){ e.preventDefault(); if(e.detail>0) e.stopPropagation(); },true);
+    var track=row.querySelector('.track'), prev=document.getElementById('cardsPrev'), next=document.getElementById('cardsNext'), busy=false;
+    var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function step(){ var c=track.firstElementChild; return c.getBoundingClientRect().width+(parseFloat(getComputedStyle(track).columnGap||getComputedStyle(track).gap)||0); }
+    function settle(fn){ track.style.transition='none'; fn(); void track.offsetWidth; track.style.transition=''; }
+    function go(dir){
+      if(busy) return; busy=true;
+      if(reduce){ if(dir>0) track.appendChild(track.firstElementChild); else track.insertBefore(track.lastElementChild,track.firstElementChild); busy=false; return; }
+      if(dir>0){ /* slide one card left, then move that card to the end and snap back */
+        track.style.transform='translateX(-'+step()+'px)';
+        track.addEventListener('transitionend',function h(){ track.removeEventListener('transitionend',h); settle(function(){ track.appendChild(track.firstElementChild); track.style.transform='none'; }); busy=false; },{once:true});
+      } else { /* bring the last card round to the front, then slide it into view */
+        settle(function(){ track.insertBefore(track.lastElementChild,track.firstElementChild); track.style.transform='translateX(-'+step()+'px)'; });
+        requestAnimationFrame(function(){ track.style.transform='none'; });
+        track.addEventListener('transitionend',function h(){ track.removeEventListener('transitionend',h); busy=false; },{once:true});
+      }
+      setTimeout(function(){ busy=false; },900); /* in case a transition never fires */
+    }
+    prev.addEventListener('click',function(){ go(-1); }); next.addEventListener('click',function(){ go(1); });
+    /* a swipe on touch does the same as the arrows */
+    var sx=null; row.addEventListener('touchstart',function(e){ sx=e.touches[0].clientX; },{passive:true});
+    row.addEventListener('touchend',function(e){ if(sx===null) return; var d=e.changedTouches[0].clientX-sx; sx=null; if(Math.abs(d)>40) go(d<0?1:-1); });
+    document.querySelectorAll('.made .card').forEach(function(c){ c.addEventListener('click',function(e){ e.preventDefault(); if(window.__openGallery) window.__openGallery(c.getAttribute('data-gallery'),0); }); });
   })();
   </script>
 </div></section>
