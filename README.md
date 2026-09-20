@@ -8,14 +8,14 @@ Built with [Astro](https://astro.build), hosted on Netlify.
 
 ```sh
 npm install
-npm run dev      # http://localhost:4321/fr/
+npm run dev      # http://localhost:4321/
 npm run build    # static site in dist/
 npm run preview
 ```
 
 ## Where things are
 
-- `src/pages/fr/` and `src/pages/en/`: one file per page and language, each just mounts a component with its `lang`.
+- `src/pages/` (French, at the root) and `src/pages/en/`: one file per page and language, each just mounts a component with its `lang`.
 - `src/components/`: the home page sections (Hero, Cards, Features, Reviews, Host, Faq, Footer, Lightbox), the House, Area and Practical pages, the booking Calendar, and the Booking and Owner pages.
 - `src/i18n.ts`: page URLs per language and the `t('français', 'English')` helper used everywhere.
 - `src/styles/global.css`: every shared style; `pages.css`: the house, area and practical pages; `book.css`: the booking and owner pages.
@@ -35,7 +35,7 @@ Three Netlify Functions do the live part; everything else is static.
 - `GET|POST|DELETE /api/owner/stays`: the private stays, kept in Netlify Blobs. Needs `Authorization: Bearer <owner password>`.
 - `GET /calendar.ics`: the feed to paste into Airbnb (Calendar → Connect calendars → Import). Every private stay closes its dates there at Airbnb's next import.
 
-The owner page (`/fr/proprietaire/`, `/en/owner/`) asks for the password, keeps it for the browser session, and sends it only to the site's own function. The page itself is static and holds nothing private.
+The owner page (`/proprietaire/`, `/en/owner/`) asks for the password, keeps it for the browser session, and sends it only to the site's own function. The page itself is static and holds nothing private.
 
 Settings on Netlify (Site configuration → Environment variables), never in the code:
 

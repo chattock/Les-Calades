@@ -12,7 +12,7 @@
 
 # the owner area is a private page: keep it out of search engines
 [[headers]]
-  for = "/fr/proprietaire/*"
+  for = "/proprietaire/*"
   [headers.values]
     X-Robots-Tag = "noindex"
 [[headers]]

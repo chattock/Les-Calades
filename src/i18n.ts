@@ -2,12 +2,12 @@ export type Lang = 'fr' | 'en';
 export const langs: Lang[] = ['fr', 'en'];
 /** Every page exists in both languages; these are the URLs, French first. */
 export const urls = {
-  home: { fr: '/fr/', en: '/en/' },
-  house: { fr: '/fr/la-maison/', en: '/en/the-house/' },
-  area: { fr: '/fr/les-alentours/', en: '/en/the-area/' },
-  practical: { fr: '/fr/infos-pratiques/', en: '/en/practical/' },
-  book: { fr: '/fr/reserver/', en: '/en/book/' },
-  owner: { fr: '/fr/proprietaire/', en: '/en/owner/' },
+  home: { fr: '/', en: '/en/' },
+  house: { fr: '/la-maison/', en: '/en/the-house/' },
+  area: { fr: '/les-alentours/', en: '/en/the-area/' },
+  practical: { fr: '/infos-pratiques/', en: '/en/practical/' },
+  book: { fr: '/reserver/', en: '/en/book/' },
+  owner: { fr: '/proprietaire/', en: '/en/owner/' },
 } as const;
 export type Page = keyof typeof urls;
 /** t('texte français', 'English text') picks the one for the page's language. */
