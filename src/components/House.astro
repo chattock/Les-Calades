@@ -1,0 +1,108 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from './Nav.astro';
+import Footer from './Footer.astro';
+import Lightbox from './Lightbox.astro';
+import '../styles/pages.css';
+import { t as T, urls, type Lang } from '../i18n';
+import { ARROW } from '../icons';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = T(lang);
+const page = 'house';
+/* each room: its gallery, a title, a strap, a paragraph, the beds when it is a bedroom, and three photos for the mosaic */
+const rooms = [
+  { g: 'living', fr: 'Le salon', en: 'The sitting room', sfr: 'des murs épais qui gardent la fraîcheur', sen: 'thick walls that keep it cool',
+    pfr: `Des canapés profonds, des livres, une télévision, et l'escalier de pierre qui monte vers les chambres. C'est la pièce où tout le monde finit par se retrouver le soir.`,
+    pen: `Deep sofas, books, a television, and the stone staircase up to the bedrooms. It is the room everyone ends up in at the end of the day.`, ph: [18, 19, 61] },
+  { g: 'kitchen', fr: 'La vieille cuisine', en: 'The old kitchen', sfr: 'un vaisselier en chêne et une table ronde', sen: 'an oak dresser and a round table',
+    pfr: `Une cuisine de ferme, bien équipée, avec sa cheminée de pierre et des portes-fenêtres sur la terrasse. Les produits du marché finissent ici.`,
+    pen: `A farmhouse kitchen, properly equipped, with its stone fireplace and french doors onto the terrace. Market produce ends up here.`, ph: [28, 29, 30] },
+  { g: 'master', fr: 'La chambre principale', en: 'The master bedroom', sfr: 'un lit king sous de grosses poutres', sen: 'a king bed under big log beams',
+    pfr: `Des portes sur son propre balcon, la climatisation, et une salle de bain à elle avec une baignoire sur pieds et une douche à l'italienne.`,
+    pen: `Doors onto its own balcony, air conditioning, and a bathroom of its own with a clawfoot bath and a walk-in shower.`,
+    bfr: ['un lit king', 'salle de bain privée : baignoire et douche'], ben: ['one king bed', 'private bathroom: bath and walk-in shower'], ph: [34, 62, 37] },
+  { g: 'fourposter', fr: 'La chambre au baldaquin', en: 'The four-poster room', sfr: 'des voilages blancs et des poutres', sen: 'white drapes and beams',
+    pfr: `Un lit à baldaquin en fer forgé sous les poutres, une armoire en pin, la climatisation, et une salle d'eau juste à côté.`,
+    pen: `A wrought-iron four-poster under the beams, a pine wardrobe, air conditioning, and a shower room right next door.`,
+    bfr: ['un grand lit à baldaquin', 'salle d’eau attenante'], ben: ['one double four-poster', 'shower room next door'], ph: [24, 25, 22] },
+  { g: 'fireplace', fr: 'La chambre à la cheminée', en: 'The fireplace room', sfr: 'des courtepointes rouges et un vieux bureau', sen: 'red quilts and an old desk',
+    pfr: `Un lit queen et un lit simple à côté, des courtepointes provençales, et une vieille cheminée aux armoiries devant laquelle on peut travailler.`,
+    pen: `A queen bed with a single beside it, Provençal quilts, and an old fireplace with coats of arms that makes a fine place to work.`,
+    bfr: ['un lit queen', 'un lit simple'], ben: ['one queen bed', 'one single bed'], ph: [16, 17, 15] },
+  { g: 'poolhouse', fr: 'Le pool house', en: 'The pool house', sfr: 'une chambre au-dessus de sa propre cuisine', sen: 'a bedroom above its own kitchen',
+    pfr: `Du vichy rouge aux fenêtres, un lit double et un lit simple, et en bas une seconde cuisine, blanche, dont la porte ouvre sur le jardin : les déjeuners au bord de l'eau partent d'ici.`,
+    pen: `Red gingham at the windows, a double and a single bed, and downstairs a second, white kitchen whose door opens onto the garden: lunches by the pool start here.`,
+    bfr: ['un lit double', 'un lit simple', 'sa propre cuisine en bas'], ben: ['one double bed', 'one single bed', 'its own kitchen downstairs'], ph: [46, 9, 10] },
+  { g: 'pool', fr: 'La piscine', en: 'The pool', sfr: 'derrière ses propres murs, avec le château au-dessus', sen: 'behind its own walls, with the château above',
+    pfr: `Au soleil toute la journée, à l'abri des regards, avec des transats, et les ruines du château sur la colline juste derrière. Rien qu'à vous pendant le séjour.`,
+    pen: `In the sun all day, out of sight of everyone, with loungers, and the château ruin on the hill right behind. Yours alone for the stay.`, ph: [1, 60, 3] },
+  { g: 'terraces', fr: 'Les terrasses', en: 'The terraces', sfr: 'sous la treille, dans la cour, ou face à la plaine', sen: 'under the vine, in the courtyard, or facing the plain',
+    pfr: `Plusieurs terrasses privées à différents étages : la grande, à côté de la chambre principale, qui regarde la plaine du Rhône jusqu'au Ventoux ; celle sous la vigne ; et la cour du pool house avec son barbecue.`,
+    pen: `Several private terraces on different levels: the main one, next to the master bedroom, looking over the Rhône plain to Mont Ventoux; the one under the vine; and the pool house courtyard with its barbecue.`, ph: [31, 6, 12] },
+  { g: 'garden', fr: 'Le jardin et les calades', en: 'The garden and the calades', sfr: 'des oliviers, des arches, et des marches de pierre', sen: 'olive trees, arches and stone steps',
+    pfr: `Des oliviers dans la cour, des passages voûtés, et les calades, ces ruelles pavées de pierre qui donnent leur nom à la maison. Tout est en escaliers, c'est le charme du village et il faut le savoir.`,
+    pen: `Olive trees in the courtyard, vaulted passages, and the calades, the stone-paved lanes that give the house its name. It is all steps and stairs, which is the charm of the village and worth knowing before you come.`, ph: [58, 47, 43] },
+];
+---
+<Base lang={lang} page={page} title={t('La maison · Les Calades', 'The house · Les Calades')} description={t('Quatre chambres, cinq salles de bain, deux cuisines, des terrasses et une piscine privée : la maison pièce par pièce.', 'Four bedrooms, five bathrooms, two kitchens, terraces and a private pool: the house room by room.')}>
+  <header class="masthead" id="top">
+    <Nav lang={lang} page={page} />
+  </header>
+<section class="bk-head"><div class="wrap">
+  <div class="row">
+    <div class="rv">
+      <h2>{t(`La maison`,`The house`)}</h2>
+      <p class="strap">{t(`une vieille maison de village, pièce par pièce`,`an old village house, room by room`)}</p>
+      <p class="lede">{t(`Des murs de pierre, des poutres, des terrasses à chaque étage et une piscine derrière ses propres murs. Dix personnes y dorment à l'aise.`,`Stone walls, beams, terraces on every level and a pool behind its own walls. Ten people sleep here comfortably.`)}</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="facts"><div class="wrap">
+  <div class="row rv">
+    <div><b>10</b><span>{t(`personnes au plus`,`guests at most`)}</span></div>
+    <div><b>4</b><span>{t(`chambres, toutes climatisées`,`bedrooms, all air-conditioned`)}</span></div>
+    <div><b>5</b><span>{t(`salles de bain`,`bathrooms`)}</span></div>
+    <div><b>2</b><span>{t(`cuisines, dont celle du pool house`,`kitchens, one in the pool house`)}</span></div>
+  </div>
+  <ul class="chips rv" style="--i:1">
+    <li>{t(`Piscine privée`,`Private pool`)}</li><li>{t(`Wifi rapide`,`Fast wifi`)}</li><li>{t(`Climatisation`,`Air conditioning`)}</li><li>{t(`Parking fermé, 3 voitures`,`Gated parking, 3 cars`)}</li><li>{t(`Barbecue`,`Barbecue`)}</li><li>{t(`Coin bureau`,`Workspace`)}</li><li>{t(`Vue sur la plaine et le Ventoux`,`View over the plain to Mont Ventoux`)}</li><li>{t(`Beaucoup d'escaliers`,`Lots of stairs`)}</li>
+  </ul>
+</div></section>
+
+<section class="rooms" id="rooms"><div class="wrap">
+  {rooms.map((r, i) => (
+    <div class="room">
+      <div class="txt rv">
+        <h3>{t(r.fr, r.en)}</h3>
+        <p class="strap">{t(r.sfr, r.sen)}</p>
+        <p class="body">{t(r.pfr, r.pen)}</p>
+        {r.bfr && <ul class="beds">{r.bfr.map((b, k) => <li>{t(b, r.ben![k])}</li>)}</ul>}
+        <a class="pill outline" href="#rooms" data-gallery={r.g}><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Voir les photos`,`See the photos`)}</span></a>
+      </div>
+      <div class="mosaic rv" style="--i:1" data-gallery={r.g}>
+        {r.ph.map((n) => <div class="photo"><img src={`/img/${n}.jpg`} alt={t(r.fr, r.en)} loading={i < 2 ? 'eager' : 'lazy'} /></div>)}
+      </div>
+    </div>
+  ))}
+</div></section>
+
+<div class="band" aria-hidden="true"></div>
+
+<section class="plain-truths"><div class="wrap">
+  <div class="center rv">
+    <h2>{t(`À savoir avant de venir`,`Worth knowing before you come`)}</h2>
+    <p class="strap">{t(`les choses qu'on préfère dire tout de suite`,`the things we would rather say up front`)}</p>
+  </div>
+  <div class="grid">
+    <div class="truth rv" style="--i:1"><h3>{t(`Des escaliers partout`,`Stairs everywhere`)}</h3><p>{t(`La maison est bâtie sur une pente, à l'intérieur comme dans le village. Elle ne convient pas à une personne qui a du mal à se déplacer.`,`The house is built on a slope, inside and out in the village. It does not suit anyone who struggles with stairs.`)}</p></div>
+    <div class="truth rv" style="--i:2"><h3>{t(`La piscine, avec une décharge`,`The pool, with a waiver`)}</h3><p>{t(`Elle n'est pas surveillée : à l'arrivée, un adulte signe une décharge de responsabilité, et les enfants restent sous la garde des adultes.`,`It is not lifeguarded: at check-in one adult signs a liability waiver, and children stay in the care of the adults.`)}</p></div>
+    <div class="truth rv" style="--i:3"><h3>{t(`Trois caméras, dehors seulement`,`Three cameras, outside only`)}</h3><p>{t(`Le parking, le mur du Mazet et le passage sous le porche. Aucune à l'intérieur, ni sur les terrasses, ni autour de la piscine.`,`The car park, the Mazet wall and the passage under the porch. None inside, on the terraces or around the pool.`)}</p></div>
+  </div>
+  <p class="center" style="margin-top:2.6rem"><a class="pill primary" href={urls.book[lang]}><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Voir les dates`,`Check dates`)}</span></a></p>
+</div></section>
+
+  <Footer lang={lang} page={page} />
+  <Lightbox />
+</Base>

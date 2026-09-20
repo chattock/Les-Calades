@@ -8,8 +8,8 @@ import '@fontsource/poppins/800.css';
 import '@fontsource/la-belle-aurore';
 import '../styles/global.css';
 import { urls, type Lang, type Page } from '../i18n';
-interface Props { lang: Lang; page: Page; title: string; description: string }
-const { lang, page, title, description } = Astro.props;
+interface Props { lang: Lang; page: Page; title: string; description: string; noindex?: boolean }
+const { lang, page, title, description, noindex = false } = Astro.props;
 ---
 <!doctype html>
 <html lang={lang} data-lang={lang}>
@@ -26,6 +26,7 @@ const { lang, page, title, description } = Astro.props;
     <meta property="og:description" content={description} />
     <meta property="og:image" content="/img/1.jpg" />
     <meta name="theme-color" content="#2F4A1E" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
   </head>
   <body>
     <div class="site">

@@ -1,5 +1,5 @@
 ---
-import { t as T, urls, type Lang, type Page } from '../i18n';
+import { t as T, urls, AIRBNB_MESSAGE, PHONE, WHATSAPP, type Lang, type Page } from '../i18n';
 import { ARROW, PLUS, PLUS_ICON, STAR } from '../icons';
 import LangSwitch from './LangSwitch.astro';
 interface Props { lang: Lang; page: Page }
@@ -18,8 +18,9 @@ const home = page === 'home' ? '' : urls.home[lang]; // anchors stay on the home
       <div><b>10</b><span>{t(`personnes au plus`,`guests at most`)}</span></div>
     </div>
     <div class="actions">
-      <a class="pill outline" href="https://wa.me/33625462209" rel="noopener"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.8A8 8 0 1 1 8.2 19z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 1a4 4 0 0 1-2-2l1-1-1-2z"/></svg></span><span>{t(`WhatsApp Laure`,`WhatsApp Laure`)}</span></a>
-      <a class="pill outline" href="sms:+33625462209"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg></span><span>{t(`Envoyer un SMS`,`Send a text`)}</span></a>
+      <a class="pill outline" href={WHATSAPP} rel="noopener"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.8A8 8 0 1 1 8.2 19z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 1a4 4 0 0 1-2-2l1-1-1-2z"/></svg></span><span>{t(`WhatsApp Laure`,`WhatsApp Laure`)}</span></a>
+      <a class="pill outline" href={`sms:${PHONE}`}><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg></span><span>{t(`Envoyer un SMS`,`Send a text`)}</span></a>
+      <a class="pill outline" href={AIRBNB_MESSAGE} rel="noopener"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c-3 4-7 7.5-7 12a7 7 0 0 0 14 0c0-4.5-4-8-7-12z"/><circle cx="12" cy="15" r="2.5"/></svg></span><span>{t(`Écrire sur Airbnb`,`Message on Airbnb`)}</span></a>
     </div>
   </div>
   <figure class="rv" style="--i:2">

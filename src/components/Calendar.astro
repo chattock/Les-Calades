@@ -1,12 +1,11 @@
 ---
-import { t as T, type Lang, type Page } from '../i18n';
+import { t as T, AIRBNB, type Lang, type Page } from '../i18n';
 import { ARROW } from '../icons';
 import prices from '../data/pricelabs.json';
 import bookings from '../data/bookings.json';
 interface Props { lang: Lang; page: Page; owner?: boolean }
 const { lang, page, owner = false } = Astro.props;
 const t = T(lang);
-const AIRBNB = 'https://www.airbnb.com/rooms/52958887';
 ---
 <section class="bk" id="book"><div class="wrap grid">
   <div class="rv">
@@ -35,13 +34,13 @@ const AIRBNB = 'https://www.airbnb.com/rooms/52958887';
   </aside>
 </div></section>
 
-<script is:inline define:vars={{ D: prices, BLOCKS: bookings, AIRBNB }}>
+<script is:inline define:vars={{ D: prices, SEED: bookings, AIRBNB, OWNER: owner }}>
 /* runs once the whole page is parsed: the owner page adds its table and form after this component */
 function initCalendar(){
-  var WEEK=7, MAXG=10;
-  var blocks=BLOCKS.slice();
-  var T={fr:{pickIn:'choisissez votre date d’arrivée',pickOut:'maintenant le départ, une semaine au moins',min:'pour cette arrivée, Airbnb demande {n} nuits au moins',cross:'ces dates passent sur une nuit déjà réservée',ok:'c’est libre : réservez ces dates sur Airbnb',nights:'nuits',empty:'Vos dates d’abord, puis Airbnb vous donne le prix de ce séjour.',guest:'voyageur',guests:'voyageurs',own:'Séjour privé',air:'Airbnb',mon:['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],dow:['L','M','M','J','V','S','D'],added:'ajouté ; les dates se ferment sur Airbnb à son prochain import'},
-         en:{pickIn:'choose your check-in date',pickOut:'now the check-out, a week at least',min:'for that check-in, Airbnb asks for {n} nights at least',cross:'those dates cross a night that is already booked',ok:'it is free: book those dates on Airbnb',nights:'nights',empty:'Your dates first, then Airbnb gives you the price for that stay.',guest:'guest',guests:'guests',own:'Private stay',air:'Airbnb',mon:['January','February','March','April','May','June','July','August','September','October','November','December'],dow:['M','T','W','T','F','S','S'],added:'added; the dates close on Airbnb at its next import'}};
+  var WEEK=7, MAXG=10, API='/api/calendar', OWNER_API='/api/owner/stays', KEY='lc-owner';
+  var blocks=SEED.slice(); /* what the build knew; replaced by the live answer when it comes */
+  var T={fr:{pickIn:'choisissez votre date d’arrivée',pickOut:'maintenant le départ, une semaine au moins',min:'pour cette arrivée, Airbnb demande {n} nuits au moins',cross:'ces dates passent sur une nuit déjà réservée',ok:'c’est libre : réservez ces dates sur Airbnb',nights:'nuits',empty:'Vos dates d’abord, puis Airbnb vous donne le prix de ce séjour.',guest:'voyageur',guests:'voyageurs',own:'Séjour privé',air:'Airbnb',mon:['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],dow:['L','M','M','J','V','S','D'],added:'ajouté ; les dates se ferment sur Airbnb à son prochain import',removed:'retiré ; Airbnb rouvre les dates à son prochain import',del:'Retirer',wrongPw:'ce n’est pas le bon mot de passe',offline:'le serveur ne répond pas ; réessayez dans un instant',live:'lu à {t}',stale:'Airbnb injoignable ; dernière lecture {t}',never:'jamais lu encore',noUrl:'à brancher : l’adresse d’export Airbnb manque dans les réglages du site'},
+         en:{pickIn:'choose your check-in date',pickOut:'now the check-out, a week at least',min:'for that check-in, Airbnb asks for {n} nights at least',cross:'those dates cross a night that is already booked',ok:'it is free: book those dates on Airbnb',nights:'nights',empty:'Your dates first, then Airbnb gives you the price for that stay.',guest:'guest',guests:'guests',own:'Private stay',air:'Airbnb',mon:['January','February','March','April','May','June','July','August','September','October','November','December'],dow:['M','T','W','T','F','S','S'],added:'added; the dates close on Airbnb at its next import',removed:'removed; Airbnb reopens the dates at its next import',del:'Remove',wrongPw:'that is not the password',offline:'the server is not answering; try again in a moment',live:'read at {t}',stale:'Airbnb unreachable; last read {t}',never:'never read yet',noUrl:'to connect: the Airbnb export address is missing from the site settings'}};
   function L(){ return document.documentElement.getAttribute('data-lang')==='en'?'en':'fr'; }
   function t(k){ return T[L()][k]; }
   var today=new Date(); today.setHours(0,0,0,0);
@@ -52,6 +51,7 @@ function initCalendar(){
   /* the minimum stay Airbnb applies to a check-in date comes from PriceLabs; a week is the floor everywhere */
   function minFor(s){ var r=D[s]; return Math.max(WEEK, (r&&r.m)||0); }
   function fmt(d){ return d.toLocaleDateString(L()==='fr'?'fr-FR':'en-GB',{weekday:'short',day:'numeric',month:'short'}); }
+  function when(ms){ return new Date(ms).toLocaleString(L()==='fr'?'fr-FR':'en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); }
   var keys=Object.keys(D).sort(), lastMonth=parse(keys[keys.length-1]); lastMonth=new Date(lastMonth.getFullYear(),lastMonth.getMonth(),1);
   var view=new Date(today.getFullYear(),today.getMonth(),1), start=null, end=null, guests=2;
   var months=document.getElementById('months'), msg=document.getElementById('msg');
@@ -107,19 +107,49 @@ function initCalendar(){
     el.innerHTML='<div class="lines"><div><span>'+nights+' '+t('nights')+' · '+guests+' '+(guests>1?t('guests'):t('guest'))+'</span></div></div>';
     if(btn){ btn.setAttribute('aria-disabled','false'); btn.href=AIRBNB+'?check_in='+iso(start)+'&check_out='+iso(end)+'&adults='+guests; }
   }
+
+  /* the live calendar: Airbnb's bookings plus the private stays, from the site's own function */
+  var syncAir=document.getElementById('syncAir');
+  function useLive(data){
+    if(!data||!Array.isArray(data.blocks)) return;
+    blocks=data.blocks; renderCal(); renderRows();
+    if(syncAir&&data.airbnb){ var a=data.airbnb; syncAir.textContent=!a.configured?t('noUrl'):(a.ok?t('live').replace('{t}',when(a.at)):(a.at?t('stale').replace('{t}',when(a.at)):t('never'))); var dot=syncAir.parentNode.parentNode.querySelector('i'); if(dot) dot.className=(a.configured&&a.ok)?'':'amber'; }
+  }
+  function refresh(){ return fetch(API,{cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).then(useLive).catch(function(){}); }
+
   /* owner page: the list of what is booked or blocked, and the form that adds a private stay */
   var rows=document.getElementById('bkRows');
   function renderRows(){
     if(!rows) return; var list=blocks.slice().sort(function(x,y){ return x.a<y.a?-1:1; }); rows.innerHTML='';
     list.forEach(function(b){ var n=Math.round((parse(b.b)-parse(b.a))/864e5), tr=document.createElement('tr');
-      tr.innerHTML='<td>'+fmt(parse(b.a))+' → '+fmt(parse(b.b))+'</td><td>'+((L()==='en'&&b.whoEn)?b.whoEn:b.who)+'</td><td><span class="tag '+b.src+'">'+t(b.src)+'</span></td><td>'+n+'</td>'; rows.appendChild(tr); });
+      tr.innerHTML='<td>'+fmt(parse(b.a))+' → '+fmt(parse(b.b))+'</td><td>'+((L()==='en'&&b.whoEn)?b.whoEn:b.who)+'</td><td><span class="tag '+b.src+'">'+t(b.src)+'</span></td><td>'+n+(b.id&&b.src==='own'?' <button type="button" class="del" data-del="'+b.id+'" aria-label="'+t('del')+'">×</button>':'')+'</td>'; rows.appendChild(tr); });
   }
+  function token(){ try{ return sessionStorage.getItem(KEY)||''; }catch(e){ return ''; } }
+  function ownerFetch(method,body,query){ return fetch(OWNER_API+(query||''),{method:method,headers:{'authorization':'Bearer '+token(),'content-type':'application/json'},body:body?JSON.stringify(body):undefined}); }
   var af=document.getElementById('addForm'); if(af) af.addEventListener('submit',function(e){
     e.preventDefault(); var a=document.getElementById('aIn').value, b=document.getElementById('aOut').value; if(!a||!b||b<=a) return;
-    var name=document.getElementById('aName').value||'Laure';
-    blocks.push({a:a,b:b,src:'own',who:name,whoEn:name}); this.reset(); renderCal(); renderRows(); msg.textContent=name+' '+t('added');
+    var name=document.getElementById('aName').value||'Laure', form=this;
+    ownerFetch('POST',{a:a,b:b,who:name}).then(function(r){ if(!r.ok) throw new Error(r.status); form.reset(); msg.textContent=name+' '+t('added'); return refresh(); }).catch(function(){ msg.textContent=t('offline'); });
   });
+  if(rows) rows.addEventListener('click',function(e){
+    var b=e.target.closest('[data-del]'); if(!b) return;
+    ownerFetch('DELETE',null,'?id='+encodeURIComponent(b.getAttribute('data-del'))).then(function(r){ if(!r.ok) throw new Error(r.status); msg.textContent=t('removed'); return refresh(); }).catch(function(){ msg.textContent=t('offline'); });
+  });
+
+  /* the owner page opens with a password; the password only ever travels to the site's own function */
+  var login=document.getElementById('login'), area=document.getElementById('ownerArea');
+  function unlock(){ if(login) login.hidden=true; if(area) area.hidden=false; renderCal(); refresh(); }
+  if(login){
+    login.addEventListener('submit',function(e){
+      e.preventDefault(); var pw=document.getElementById('pw').value, err=document.getElementById('pwErr');
+      try{ sessionStorage.setItem(KEY,pw); }catch(x){}
+      ownerFetch('GET').then(function(r){ if(r.status===401){ err.textContent=t('wrongPw'); try{ sessionStorage.removeItem(KEY); }catch(x){} return; } if(!r.ok) throw new Error(r.status); unlock(); }).catch(function(){ err.textContent=t('offline'); });
+    });
+    var feed=document.getElementById('feedUrl'); if(feed) feed.textContent=location.origin+'/calendar.ics';
+    if(token()){ ownerFetch('GET').then(function(r){ if(r.ok) unlock(); }).catch(function(){}); }
+  }
   renderCal(); renderStay(); renderRows(); say('pickIn');
+  if(!OWNER) refresh();
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initCalendar); else initCalendar();
 </script>

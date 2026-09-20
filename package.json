@@ -10,12 +10,14 @@
     "check": "astro check"
   },
   "dependencies": {
-    "astro": "^5.14.0",
+    "@fontsource/la-belle-aurore": "^5.2.6",
     "@fontsource/poppins": "^5.2.6",
-    "@fontsource/la-belle-aurore": "^5.2.6"
+    "@netlify/blobs": "^9.1.6",
+    "astro": "^5.14.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
+    "netlify-cli": "^23.15.1",
     "typescript": "^5.9.2"
   }
 }
