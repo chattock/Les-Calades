@@ -40,7 +40,7 @@ The owner page (`/proprietaire/`, `/en/owner/`) asks for the password, keeps it 
 Settings on Netlify (Site configuration → Environment variables), never in the code:
 
 - `OWNER_PASSWORD`: the owner area password.
-- `AIRBNB_ICAL_URL`: the export link from Airbnb (Calendar → Availability settings → Connect calendars → Export). Set on Netlify on 2026-09-20 as a secret, functions scope. A change to it needs a new deploy before the function sees it.
+- `AIRBNB_ICAL_URL`: the export link from Airbnb (Calendar → Availability settings → Connect calendars → Export). Set on Netlify on 2026-09-20 as a secret for the production context (the connector only stores it when given one context). A change to it needs a new deploy before the function sees it.
 
 To run the functions on a machine without Netlify, set `LC_LOCAL_STORE=<a directory>` and the stores become JSON files there.
 
