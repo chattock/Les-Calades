@@ -33,9 +33,9 @@ const cur = (p: Page) => (page === p ? 'page' : undefined);
     var r=cells.map(function(b){var q=b.getBoundingClientRect();return {l:q.left-gr.left,r:q.right-gr.left,top:q.top-gr.top};});
     /* three treads and two risers: the first tread sits on the cap top of LES, the third has its underside on the LES baseline (Poppins: cap top .275em, baseline .975em at line-height 1.25) */
     var y0=0.275*fs+t/2, y2=0.975*fs-t/2, step=(y2-y0)/2;
-    var x0=r[0].l, xEnd=(r[2].r+r[3].l)/2+dx[2], w=(xEnd-x0)/3; // the last tread ends in the E|S gap, as before
-    var ext=0.38*step; // the lower treads run on a little to the left past their riser, like a nosing
-    var d='M'+x0.toFixed(2)+' '+y0.toFixed(2)+'H'+(x0+w).toFixed(2)+'V'+(y0+step).toFixed(2);
+    var x0=r[0].l, xEnd=r[3].r, w=(xEnd-x0)/3; // the last tread runs to the end of the S (james 19:08)
+    var ext=0.5*step, ext0=0.18*step; // every tread runs on a little to the left: the lower ones past their riser, the first past the A
+    var d='M'+(x0-ext0).toFixed(2)+' '+y0.toFixed(2)+'H'+(x0+w).toFixed(2)+'V'+(y0+step).toFixed(2);
     d+='M'+(x0+w-ext).toFixed(2)+' '+(y0+step).toFixed(2)+'H'+(x0+2*w).toFixed(2)+'V'+y2.toFixed(2);
     d+='M'+(x0+2*w-ext).toFixed(2)+' '+y2.toFixed(2)+'H'+xEnd.toFixed(2);
     svg.setAttribute('viewBox','0 0 '+gr.width+' '+gr.height); path.setAttribute('d',d);
