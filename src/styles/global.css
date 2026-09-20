@@ -173,11 +173,13 @@ details p{padding:0 1.3rem 1.1rem;font-size:.95rem;color:var(--ink-2);max-width:
   .nav .right{display:flex;gap:.6rem;align-items:center}
   .nav .menu{display:inline-flex;align-items:center;gap:.5rem;background:none;border:1px solid rgba(255,255,255,.55);border-radius:999px;color:#fff;font:inherit;font-size:.78rem;padding:.32rem .8rem;cursor:pointer}
   .nav .menu svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round}
-  .nav.open ul{display:flex;position:absolute;left:1.25rem;right:1.25rem;top:4.2rem;flex-direction:column;align-items:flex-start;gap:0;background:rgba(20,26,22,.86);backdrop-filter:blur(14px);border-radius:14px;padding:.6rem 1.2rem}
-  .nav.open ul li{width:100%;border-bottom:1px solid rgba(255,255,255,.1)} .nav.open ul li:last-child{border:0}
-  .nav.open ul a{display:block;padding:.85rem 0;border:0;color:var(--cream);opacity:1}
-  .nav.open ul a[aria-current]{color:#fff;font-weight:600}
+  /* the open menu is a sheet of the same paper as the header, hanging from its hairline, with the desktop items stacked */
+  .nav.open ul{display:flex;position:absolute;left:0;right:0;top:100%;z-index:6;flex-direction:column;align-items:stretch;gap:0;background:var(--paper);border-bottom:1px solid var(--olive-deep);padding:.3rem var(--gutter) .9rem;box-shadow:0 18px 30px -22px rgba(31,42,22,.35)}
+  .nav.open ul li{width:100%;border-bottom:1px solid rgba(47,74,30,.16)} .nav.open ul li:last-child{border:0}
+  .nav.open ul a{display:block;padding:1rem 0;border:0;color:var(--olive-deep);opacity:1;font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;font-weight:500}
+  .nav.open ul a[aria-current]{font-weight:700;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.4em}
   .nav.open ul .lang{display:none}
+  .nav.open .menu{background:var(--olive-deep);color:var(--cream);border-color:var(--olive-deep)}
   .faq .panel{min-height:0}
   .foot .cols{grid-template-columns:1fr}
 }
@@ -237,7 +239,6 @@ h3{letter-spacing:.02em}
   :root{--cross:0%}
   .poster{min-height:680px}
   .poster .nav.mast{padding:0 1.25rem;height:9%}
-  .nav.open ul{background:rgba(47,74,30,.94)}
   .image{top:9%;height:56%}
   .image img{width:100%;margin-left:0;object-position:50% 45%}
   .plane,.plane-inner{height:35%}
