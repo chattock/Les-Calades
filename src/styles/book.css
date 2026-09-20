@@ -63,6 +63,7 @@ form.add label{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;col
 form.add .full{grid-column:1/-1}
 form.add .pill{justify-self:start;max-width:100%}
 form.add input{min-width:0;box-sizing:border-box}
+.airline{margin:.8rem 0 0;color:var(--ink-2);font-size:.8rem}
 .sync{display:grid;gap:.9rem}
 .sync div{display:flex;gap:.8rem;align-items:flex-start;font-size:.9rem;line-height:1.45}
 .sync i{width:10px;height:10px;border-radius:50%;background:#4E8B3A;margin-top:.45rem;flex:none}

@@ -39,7 +39,7 @@ const page = 'owner';
   </div>
   <div class="grid">
     <div>
-      <div class="panel rv"><h3>{t(`Réservations et séjours privés`,`Bookings and private stays`)}</h3><table class="bk-list"><thead><tr><th>{t(`Dates`,`Dates`)}</th><th>{t(`Qui`,`Who`)}</th><th>{t(`Source`,`Source`)}</th><th>{t(`Nuits`,`Nights`)}</th></tr></thead><tbody id="bkRows"></tbody></table></div>
+      <div class="panel rv"><h3>{t(`Réservations et séjours privés`,`Bookings and private stays`)}</h3><table class="bk-list"><thead><tr><th>{t(`Dates`,`Dates`)}</th><th>{t(`Qui`,`Who`)}</th><th>{t(`Source`,`Source`)}</th><th>{t(`Nuits`,`Nights`)}</th></tr></thead><tbody id="bkRows"></tbody></table><p class="airline"><small id="syncAir">…</small></p></div>
       <div class="panel rv" style="--i:1"><h3>{t(`Ajouter un séjour privé`,`Add a private stay`)}</h3>
         <form class="add" id="addForm">
           <label><span>{t(`Arrivée`,`Check-in`)}</span><input type="date" id="aIn" required></label>
@@ -50,14 +50,8 @@ const page = 'owner';
       </div>
     </div>
     <div>
-      <div class="panel rv"><h3>{t(`Synchronisation`,`Sync`)}</h3>
-        <div class="sync">
-          <div><i class="amber"></i><span><span>{t(`Airbnb → site : le calendrier exporté par Airbnb est relu toutes les heures. Les nuits réservées apparaissent ici et sur la page Réserver.`,`Airbnb → site: the calendar Airbnb exports is re-read every hour. Booked nights show up here and on the Book page.`)}</span><small id="syncAir">…</small></span></div>
-          <div><i></i><span><span>{t(`PriceLabs → site : les séjours minimum par date d'arrivée, les mêmes que sur Airbnb, pour que le calendrier ne propose que ce qu'Airbnb acceptera.`,`PriceLabs → site: the minimum stay per check-in date, the same as on Airbnb, so the calendar only offers what Airbnb will accept.`)}</span><small>{t(`lu à chaque mise en ligne du site`,`read each time the site is published`)}</small></span></div>
-          <div><i class="amber"></i><span><span>{t(`Site → Airbnb : chaque séjour privé part dans ce calendrier, qu'Airbnb importe toutes les quelques heures et où les dates se ferment.`,`Site → Airbnb: every private stay goes into this calendar, which Airbnb imports every few hours and where the dates close.`)}</span><small>{t(`à coller une fois dans Airbnb, Calendrier → Connecter des calendriers → Importer :`,`paste once into Airbnb, Calendar → Connect calendars → Import:`)} <code id="feedUrl">/calendar.ics</code></small></span></div>
-        </div>
       </div>
-      <div class="panel rv" style="--i:1"><h3>{t(`Comment ça se tient`,`How it holds together`)}</h3>
+      <div class="panel rv"><h3>{t(`Comment ça se tient`,`How it holds together`)}</h3>
         <ul class="plain">
           <li>{t(`Les voyageurs réservent et paient sur Airbnb : le prix, la caution, la protection et les annulations restent là-bas.`,`Guests book and pay on Airbnb: price, deposit, cover and cancellations stay there.`)}</li>
           <li>{t(`Airbnb n'a pas d'API pour un hôte particulier : le lien fiable dans les deux sens est le calendrier iCal (import et export).`,`Airbnb has no API for a private host: the reliable link both ways is the iCal calendar (import and export).`)}</li>
