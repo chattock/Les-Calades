@@ -61,7 +61,8 @@ table.bk-list{width:100%;border-collapse:collapse;font-size:.88rem}
 form.add{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
 form.add label{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);display:grid;gap:.3rem}
 form.add .full{grid-column:1/-1}
-form.add .pill{justify-self:start}
+form.add .pill{justify-self:start;max-width:100%}
+form.add input{min-width:0;box-sizing:border-box}
 .sync{display:grid;gap:.9rem}
 .sync div{display:flex;gap:.8rem;align-items:flex-start;font-size:.9rem;line-height:1.45}
 .sync i{width:10px;height:10px;border-radius:50%;background:#4E8B3A;margin-top:.45rem;flex:none}
@@ -70,7 +71,7 @@ form.add .pill{justify-self:start}
 .plain{list-style:none;margin:0;padding:0;display:grid;gap:.6rem;font-size:.9rem;line-height:1.5}
 .plain li{padding-left:1.1rem;position:relative} .plain li::before{content:"";position:absolute;left:0;top:.6rem;width:6px;height:6px;border-radius:50%;background:var(--olive-deep)}
 @media (max-width:980px){ .bk .grid,.owner .grid{grid-template-columns:1fr} .stay{position:static} .how .steps{grid-template-columns:1fr} }
-@media (max-width:720px){ .months{grid-template-columns:1fr} form.add{grid-template-columns:1fr} .bk-head .row{align-items:flex-start} }
+@media (max-width:720px){ .months{grid-template-columns:1fr} form.add{grid-template-columns:1fr} .bk-head .row{align-items:flex-start} .login{min-width:0;width:100%} .login .field{flex-wrap:wrap} .login input{flex:1 1 9rem} }
 
 /* owner login and the private-stay list */
 .login{background:var(--paper);border-radius:14px;padding:1.2rem 1.4rem 1rem;min-width:min(100%,22rem)}

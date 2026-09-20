@@ -8,9 +8,11 @@ const t = T(lang);
 const home = page === 'home' ? '' : urls.home[lang]; // anchors stay on the home page, other pages link back to it
 ---
 <section class="hosts" id="hosts"><div class="wrap grid">
-  <div class="rv">
+  <div class="head rv">
     <h2>{t(`Laure`,`Laure`)}</h2>
     <p class="strap">{t(`votre hôte, à la porte avec les clés`,`your host, at the door with the keys`)}</p>
+  </div>
+  <div class="rest rv">
     <p class="body">{t(`J'accueille des voyageurs ici depuis cinq ans. L'arrivée se fait à partir de 17 h : je vous remets les clés, vous fais visiter la maison et réponds à vos questions. Le départ est avant 11 h.`,`I have hosted guests here for five years. Check-in is from 5 pm: I hand over the keys, show you round the house and answer anything. Check-out is by 11 am.`)}</p>
     <div class="nums">
       <div><b>5</b><span>{t(`ans d'accueil`,`years of hosting`)}</span></div>

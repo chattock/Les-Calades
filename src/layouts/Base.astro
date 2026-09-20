@@ -18,13 +18,14 @@ const { lang, page, title, description, noindex = false } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="alternate" hreflang="fr" href={urls[page].fr} />
-    <link rel="alternate" hreflang="en" href={urls[page].en} />
-    <link rel="alternate" hreflang="x-default" href={urls[page].fr} />
+    <link rel="canonical" href={new URL(urls[page][lang], Astro.site)} />
+    <link rel="alternate" hreflang="fr" href={new URL(urls[page].fr, Astro.site)} />
+    <link rel="alternate" hreflang="en" href={new URL(urls[page].en, Astro.site)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(urls[page].fr, Astro.site)} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="/img/1.jpg" />
+    <meta property="og:image" content={new URL("/img/1.jpg", Astro.site)} />
     <meta name="theme-color" content="#2F4A1E" />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
   </head>
@@ -41,7 +42,7 @@ const { lang, page, title, description, noindex = false } = Astro.props;
         els.forEach(function(el){io.observe(el);});
       } else { els.forEach(function(el){el.classList.add('in');}); }
       var nav=document.querySelector('.nav'), btn=document.querySelector('.nav .menu');
-      if(btn){ btn.addEventListener('click',function(){ var o=nav.classList.toggle('open'); btn.setAttribute('aria-expanded',String(o)); }); }
+      if(btn){ btn.addEventListener('click',function(){ var o=nav.classList.toggle('open'); btn.setAttribute('aria-expanded',String(o)); }); nav.querySelectorAll('ul a').forEach(function(a){ a.addEventListener('click',function(){ nav.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }); }); }
     })();
     </script>
   </body>

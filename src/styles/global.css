@@ -111,7 +111,8 @@ figcaption{font-family:var(--ff-script);font-size:1.15rem;color:var(--strap-ink)
 .dark .hint{font-family:var(--ff-script);color:#EDE6D3;opacity:.8;font-size:1.05rem;margin-top:1rem}
 
 /* 5: hosts */
-.hosts .grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2.5rem,7vw,7rem);align-items:center}
+.hosts .grid{display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"head photo" "rest photo";grid-template-rows:auto 1fr;column-gap:clamp(2.5rem,7vw,7rem);row-gap:0;align-items:start}
+.hosts .head{grid-area:head} .hosts .rest{grid-area:rest} .hosts figure{grid-area:photo;align-self:center}
 .hosts .photo{aspect-ratio:4/5}
 .photo.placeholder{display:grid;place-items:center;border:1px dashed var(--rule);background:var(--paper-2)}
 .photo.placeholder span{font-family:var(--ff-script);font-size:1.5rem;color:var(--strap-ink);text-align:center;padding:1.5rem;line-height:1.3}
@@ -160,7 +161,9 @@ details p{padding:0 1.3rem 1.1rem;font-size:.95rem;color:var(--ink-2);max-width:
 
 @media (max-width:900px){
   .cards .track{grid-auto-columns:calc((100% - 1rem)/2);column-gap:1rem}
-  .more .grid,.hosts .grid,.foot .top,.dark .top{grid-template-columns:1fr}
+  .more .grid,.foot .top,.dark .top{grid-template-columns:1fr}
+  .hosts .grid{grid-template-columns:1fr;grid-template-areas:"head" "photo" "rest";grid-template-rows:auto auto auto}
+  .hosts figure{margin:1.4rem 0 1.6rem} .hosts figcaption{display:none}
   .more .photo,.hosts .photo{aspect-ratio:4/3}
   .stats{justify-content:flex-start}
   .foot .cols{grid-template-columns:1fr 1fr}
@@ -172,7 +175,8 @@ details p{padding:0 1.3rem 1.1rem;font-size:.95rem;color:var(--ink-2);max-width:
   .nav .menu svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round}
   .nav.open ul{display:flex;position:absolute;left:1.25rem;right:1.25rem;top:4.2rem;flex-direction:column;align-items:flex-start;gap:0;background:rgba(20,26,22,.86);backdrop-filter:blur(14px);border-radius:14px;padding:.6rem 1.2rem}
   .nav.open ul li{width:100%;border-bottom:1px solid rgba(255,255,255,.1)} .nav.open ul li:last-child{border:0}
-  .nav.open ul a{display:block;padding:.85rem 0;border:0}
+  .nav.open ul a{display:block;padding:.85rem 0;border:0;color:var(--cream);opacity:1}
+  .nav.open ul a[aria-current]{color:#fff;font-weight:600}
   .nav.open ul .lang{display:none}
   .faq .panel{min-height:0}
   .foot .cols{grid-template-columns:1fr}

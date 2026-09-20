@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 
 // Les Calades: a static site, French at the root, every page also in English under /en/.
 export default defineConfig({
+  site: 'https://maisonlescalades.com',
   i18n: {
     defaultLocale: 'fr',
     locales: ['fr', 'en'],
