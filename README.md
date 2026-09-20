@@ -49,3 +49,7 @@ To run the functions on a machine without Netlify, set `LC_LOCAL_STORE=<a direct
 - Minimum stays from PriceLabs on a schedule, instead of `src/data/pricelabs.json` refreshed at build time.
 - Live rating and review count from Airbnb.
 - The registration number (meublé de tourisme) in the footer. The domain is maisonlescalades.com (bought 2026-09-20, to be attached to the Netlify site under Domain management); once it resolves, set `site: 'https://maisonlescalades.com'` in `astro.config.mjs` for absolute hreflang links and re-paste the feed address in Airbnb.
+
+## Temporary curtain
+
+While the site is being finished, `netlify/edge-functions/gate.js` asks every visitor for the owner password (the `OWNER_PASSWORD` site setting) once and sets a 30-day cookie. `/calendar.ics` and `/api/*` stay open so the Airbnb sync keeps working. Delete that file and push to open the site.
