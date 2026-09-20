@@ -16,7 +16,7 @@ const cur = (p: Page) => (page === p ? 'page' : undefined);
     <ul id="menu">
       <li><a href={urls.house[lang]} aria-current={cur('house')}>{t(`La maison`,`The house`)}</a></li>
       <li><a href={urls.area[lang]} aria-current={cur('area')}>{t(`Les alentours`,`The area`)}</a></li>
-      <li><a href={urls.practical[lang]} aria-current={cur('practical')}>{t(`Pratique`,`Practical`)}</a></li>
+      <li><a href={urls.practical[lang]} aria-current={cur('practical')}>{t(`Informations`,`Information`)}</a></li>
       <li><a href={home + '#reviews'}>{t(`Les avis`,`Reviews`)}</a></li>
       <li><a href={urls.book[lang]} aria-current={cur('book')}>{t(`Réserver`,`Book`)}</a></li>
       <li><LangSwitch lang={lang} page={page} /></li>

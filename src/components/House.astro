@@ -50,19 +50,13 @@ const rooms = [
     <Nav lang={lang} page={page} />
   </header>
 
-<section class="facts"><div class="wrap">
-  <div class="row rv">
-    <div><b>10</b><span>{t(`personnes au plus`,`guests at most`)}</span></div>
-    <div><b>4</b><span>{t(`chambres, toutes climatisées`,`bedrooms, all air-conditioned`)}</span></div>
-    <div><b>3</b><span>{t(`salles de bain, et un WC en plus`,`bathrooms, plus a separate toilet`)}</span></div>
-    <div><b>2</b><span>{t(`cuisines, dont celle du pool house`,`kitchens, one in the pool house`)}</span></div>
-  </div>
-  <ul class="chips rv" style="--i:1">
-    <li>{t(`Piscine privée`,`Private pool`)}</li><li>{t(`Wifi rapide`,`Fast wifi`)}</li><li>{t(`Climatisation`,`Air conditioning`)}</li><li>{t(`Parking fermé, 3 voitures`,`Gated parking, 3 cars`)}</li><li>{t(`Barbecue`,`Barbecue`)}</li><li>{t(`Coin bureau`,`Workspace`)}</li><li>{t(`Vue sur la plaine et le Ventoux`,`View over the plain to Mont Ventoux`)}</li><li>{t(`Beaucoup d'escaliers`,`Lots of stairs`)}</li>
-  </ul>
-</div></section>
 
 <section class="rooms" id="rooms"><div class="wrap">
+  <div class="intro rv">
+    <h2>{t(`Pièce par pièce`,`Room by room`)}</h2>
+    <p class="strap">{t(`une vieille maison de village, en escaliers`,`an old village house, on several levels`)}</p>
+    <p class="lede">{t(`Des murs de pierre et des poutres, une terrasse à chaque étage, et une piscine derrière ses propres murs. Dix personnes y dorment à l'aise.`,`Stone walls and beams, a terrace on every level, and a pool behind its own walls. Ten people sleep here comfortably.`)}</p>
+  </div>
   {rooms.map((r, i) => (
     <div class="room">
       <div class="txt rv">

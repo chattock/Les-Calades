@@ -10,16 +10,17 @@
 .day{aspect-ratio:1;display:grid;place-items:center;font:inherit;font-size:.9rem;border:0;background:none;padding:0;margin:0;border-radius:8px;cursor:pointer;position:relative;color:var(--ink);user-select:none;-webkit-user-select:none}
 .day.pad{cursor:default}
 .day.past{color:#CFCAC0;cursor:default}
-.day.blk{color:#B8B3A6;cursor:default;background:repeating-linear-gradient(135deg,transparent 0 4px,rgba(63,50,55,.10) 4px 5px)}
-.day.own{color:#7B5A33;background:repeating-linear-gradient(45deg,transparent 0 4px,rgba(199,156,113,.4) 4px 5px)}
+.day.blk{color:#A8A296;cursor:default;background:#E9E5DA;text-decoration:line-through;text-decoration-thickness:1.5px;border-radius:0}
+.day.blk+.day.blk{margin-left:-1px}
+.day.own{color:#7B5A33;cursor:default;background:repeating-linear-gradient(45deg,rgba(199,156,113,.22) 0 4px,rgba(199,156,113,.5) 4px 5px);text-decoration:line-through;text-decoration-thickness:1.5px;border-radius:0}
 .day.free:not(.start):not(.end):not(.in):hover{background:var(--cream)}
 .day.in{background:rgba(63,87,33,.14);border-radius:0}
 .day.start,.day.end{background:var(--olive-deep);color:var(--cream)}
 .day.start{border-radius:8px 0 0 8px} .day.end{border-radius:0 8px 8px 0} .day.start.end{border-radius:8px}
 .legend{display:flex;gap:1.2rem 1.6rem;flex-wrap:wrap;margin-top:1.4rem;font-size:.8rem;color:var(--ink-2)}
 .legend i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:.45rem;border:1px solid var(--rule)}
-.legend i.blk{background:repeating-linear-gradient(135deg,transparent 0 3px,rgba(63,50,55,.18) 3px 4px)}
-.legend i.own{background:repeating-linear-gradient(45deg,transparent 0 3px,rgba(199,156,113,.6) 3px 4px)}
+.legend i.blk{background:#E9E5DA}
+.legend i.own{background:repeating-linear-gradient(45deg,rgba(199,156,113,.22) 0 3px,rgba(199,156,113,.6) 3px 4px)}
 .legend i.sel{background:var(--olive-deep);border-color:var(--olive-deep)}
 .msg{min-height:1.5rem;margin-top:1rem;font-family:var(--ff-script);color:var(--strap-ink);font-size:1.2rem;line-height:1.3}
 .stay{position:sticky;top:1.5rem;background:var(--cream);border-radius:calc(var(--radius) + 4px);padding:1.6rem}
