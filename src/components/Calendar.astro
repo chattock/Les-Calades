@@ -1,11 +1,12 @@
 ---
-import { t as T, urls, type Lang, type Page } from '../i18n';
+import { t as T, type Lang, type Page } from '../i18n';
 import { ARROW } from '../icons';
 import prices from '../data/pricelabs.json';
 import bookings from '../data/bookings.json';
 interface Props { lang: Lang; page: Page; owner?: boolean }
 const { lang, page, owner = false } = Astro.props;
 const t = T(lang);
+const AIRBNB = 'https://www.airbnb.com/rooms/52958887';
 ---
 <section class="bk" id="book"><div class="wrap grid">
   <div class="rv">
@@ -16,9 +17,8 @@ const t = T(lang);
     <div class="months" id="months"></div>
     <div class="legend">
       <span><i class="sel"></i><span>{t(`vos dates`,`your dates`)}</span></span>
-      <span><i class="blk"></i><span>{t(`réservé (Airbnb ou en direct)`,`booked (Airbnb or direct)`)}</span></span>
-      <span><i class="own"></i><span>{t(`bloqué par Laure`,`blocked by Laure`)}</span></span>
-      <span><i class="req"></i><span>{t(`demande en attente`,`request pending`)}</span></span>
+      <span><i class="blk"></i><span>{t(`réservé sur Airbnb`,`booked on Airbnb`)}</span></span>
+      <span><i class="own"></i><span>{t(`séjour privé`,`private stay`)}</span></span>
     </div>
     <p class="msg" id="msg"></p>
   </div>
@@ -29,27 +29,19 @@ const t = T(lang);
       <div><small>{t(`Départ`,`Check-out`)}</small><b id="dOut">—</b></div>
     </div>
     <div class="guests"><span>{t(`Voyageurs`,`Guests`)}</span><span class="step"><button type="button" id="gMinus" aria-label="Fewer guests">−</button><span id="gN">2</span><button type="button" id="gPlus" aria-label="More guests">+</button></span></div>
-    <div id="quote"></div>
-    <a class="pill primary" href="#" id="reqBtn" aria-disabled="true"><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Demander à réserver`,`Request to book`)}</span></a>
-    <form class="req" id="reqForm" hidden>
-      <input type="text" id="fName" required placeholder="Nom / Name">
-      <input type="email" id="fMail" required placeholder="E-mail">
-      <input type="tel" id="fTel" placeholder="Téléphone / Phone">
-      <textarea id="fMsg" placeholder="Un mot sur votre groupe, vos horaires… / A word about your group, your times…"></textarea>
-      <button class="pill primary" type="submit"><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Envoyer la demande`,`Send the request`)}</span></button>
-      <p class="note">{t(`Rien n'est débité maintenant. Laure vous répond sous un jour ; si c'est oui, vous recevez un lien de paiement sécurisé.`,`Nothing is charged now. Laure replies within a day; if it is a yes, you get a secure payment link.`)}</p>
-    </form>
-    <div class="sent" id="sent" hidden></div>
+    <div id="summary"></div>
+    {!owner && <a class="pill primary" href={AIRBNB} id="airBtn" aria-disabled="true" rel="noopener"><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Réserver sur Airbnb`,`Book on Airbnb`)}</span></a>}
+    {!owner && <p class="note">{t(`Le bouton ouvre notre annonce Airbnb avec vos dates et votre nombre de voyageurs. Le prix exact, le paiement, la caution et les conditions d'annulation sont là-bas.`,`The button opens our Airbnb listing with your dates and party size filled in. The exact price, payment, deposit and cancellation terms are there.`)}</p>}
   </aside>
 </div></section>
 
-<script is:inline define:vars={{ D: prices, BLOCKS: bookings }}>
+<script is:inline define:vars={{ D: prices, BLOCKS: bookings, AIRBNB }}>
 /* runs once the whole page is parsed: the owner page adds its table and form after this component */
 function initCalendar(){
-  var MIN=7, MAXG=10, DISC=[[28,.55]];
+  var WEEK=7, MAXG=10;
   var blocks=BLOCKS.slice();
-  var T={fr:{pickIn:'choisissez votre date d’arrivée',pickOut:'maintenant le départ, une semaine au moins',min:'une semaine au moins, choisissez un départ plus tard',cross:'ces dates passent sur une nuit déjà réservée',ok:'c’est libre, le prix est là',nights:'nuits',night:'nuit',disc:'remise séjour d\u2019un mois',total:'Total',empty:'Vos dates d’abord ; le prix vient ensuite, pour ce séjour précis.',dep:'Caution bloquée à l’arrivée, jamais débitée sans raison. Taxe de séjour incluse dans le total.',sentT:'Demande envoyée',sentB:'Laure vous répond sous un jour à {mail}. Les dates sont en option pour vous pendant 24 h.',guest:'voyageur',guests:'voyageurs',req:'Demande en attente',dir:'Réservation directe',own:'Bloqué',air:'Airbnb',mon:['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],dow:['L','M','M','J','V','S','D'],added:'ajouté ; les dates partent vers Airbnb au prochain import'},
-         en:{pickIn:'choose your check-in date',pickOut:'now the check-out, a week at least',min:'a week at least, choose a later check-out',cross:'those dates cross a night that is already booked',ok:'it is free, and there is your price',nights:'nights',night:'night',disc:'month-long stay discount',total:'Total',empty:'Your dates first; the price follows, for that exact stay.',dep:'Deposit held at check-in, never charged without cause. Tourist tax included in the total.',sentT:'Request sent',sentB:'Laure replies within a day at {mail}. The dates are held for you for 24 hours.',guest:'guest',guests:'guests',req:'Request pending',dir:'Direct booking',own:'Blocked',air:'Airbnb',mon:['January','February','March','April','May','June','July','August','September','October','November','December'],dow:['M','T','W','T','F','S','S'],added:'added; the dates reach Airbnb at its next import'}};
+  var T={fr:{pickIn:'choisissez votre date d’arrivée',pickOut:'maintenant le départ, une semaine au moins',min:'pour cette arrivée, Airbnb demande {n} nuits au moins',cross:'ces dates passent sur une nuit déjà réservée',ok:'c’est libre : réservez ces dates sur Airbnb',nights:'nuits',empty:'Vos dates d’abord, puis Airbnb vous donne le prix de ce séjour.',guest:'voyageur',guests:'voyageurs',own:'Séjour privé',air:'Airbnb',mon:['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],dow:['L','M','M','J','V','S','D'],added:'ajouté ; les dates se ferment sur Airbnb à son prochain import'},
+         en:{pickIn:'choose your check-in date',pickOut:'now the check-out, a week at least',min:'for that check-in, Airbnb asks for {n} nights at least',cross:'those dates cross a night that is already booked',ok:'it is free: book those dates on Airbnb',nights:'nights',empty:'Your dates first, then Airbnb gives you the price for that stay.',guest:'guest',guests:'guests',own:'Private stay',air:'Airbnb',mon:['January','February','March','April','May','June','July','August','September','October','November','December'],dow:['M','T','W','T','F','S','S'],added:'added; the dates close on Airbnb at its next import'}};
   function L(){ return document.documentElement.getAttribute('data-lang')==='en'?'en':'fr'; }
   function t(k){ return T[L()][k]; }
   var today=new Date(); today.setHours(0,0,0,0);
@@ -57,12 +49,13 @@ function initCalendar(){
   function parse(s){ var p=s.split('-'); return new Date(+p[0],+p[1]-1,+p[2]); }
   function addD(d,n){ var x=new Date(d); x.setDate(x.getDate()+n); return x; }
   function blockOf(s){ for(var i=0;i<blocks.length;i++){ if(s>=blocks[i].a&&s<blocks[i].b) return blocks[i]; } return null; }
-  function eur(n){ return L()==='fr'? n.toLocaleString('fr-FR')+' €' : '€'+n.toLocaleString('en-GB'); }
-  function fmt(d,long){ return d.toLocaleDateString(L()==='fr'?'fr-FR':'en-GB',long?{weekday:'short',day:'numeric',month:'long',year:'numeric'}:{weekday:'short',day:'numeric',month:'short'}); }
+  /* the minimum stay Airbnb applies to a check-in date comes from PriceLabs; a week is the floor everywhere */
+  function minFor(s){ var r=D[s]; return Math.max(WEEK, (r&&r.m)||0); }
+  function fmt(d){ return d.toLocaleDateString(L()==='fr'?'fr-FR':'en-GB',{weekday:'short',day:'numeric',month:'short'}); }
   var keys=Object.keys(D).sort(), lastMonth=parse(keys[keys.length-1]); lastMonth=new Date(lastMonth.getFullYear(),lastMonth.getMonth(),1);
-  var view=new Date(today.getFullYear(),today.getMonth(),1), start=null, end=null, guests=2, sentTo=null;
+  var view=new Date(today.getFullYear(),today.getMonth(),1), start=null, end=null, guests=2;
   var months=document.getElementById('months'), msg=document.getElementById('msg');
-  function say(k){ msg.textContent=k?t(k):''; }
+  function say(k,n){ msg.textContent=k?t(k).replace('{n}',n):''; }
   function renderCal(){
     months.innerHTML='';
     for(var m=0;m<2;m++){
@@ -76,7 +69,7 @@ function initCalendar(){
         var dt=new Date(first.getFullYear(),first.getMonth(),d), s=iso(dt), cell=document.createElement('button'); cell.type='button'; cell.className='day'; cell.textContent=d; cell.setAttribute('data-d',s);
         var b=blockOf(s);
         if(dt<=today){ cell.classList.add('past'); cell.disabled=true; }
-        else if(b){ cell.classList.add(b.src==='own'?'own':(b.src==='req'?'req':'blk')); cell.disabled=true; cell.title=(L()==='en'&&b.whoEn)?b.whoEn:b.who; }
+        else if(b){ cell.classList.add(b.src==='own'?'own':'blk'); cell.disabled=true; cell.title=(L()==='en'&&b.whoEn)?b.whoEn:b.who; }
         else cell.classList.add('free');
         if(start&&s===iso(start)) cell.classList.add('start');
         if(end&&s===iso(end)) cell.classList.add('end');
@@ -93,8 +86,8 @@ function initCalendar(){
     var d=parse(c.getAttribute('data-d'));
     if(!start||(start&&end)||d<=start){ start=d; end=null; say('pickOut'); }
     else {
-      var nights=Math.round((d-start)/864e5);
-      if(nights<MIN){ say('min'); }
+      var nights=Math.round((d-start)/864e5), need=minFor(iso(start));
+      if(nights<need){ say('min', need); }
       else { var x=new Date(start), clash=false; while(x<d){ if(blockOf(iso(x))){ clash=true; break; } x=addD(x,1); }
         if(clash){ say('cross'); } else { end=d; say('ok'); } }
     }
@@ -104,33 +97,17 @@ function initCalendar(){
   document.getElementById('calNext').addEventListener('click',function(){ view=new Date(view.getFullYear(),view.getMonth()+2,1); renderCal(); });
   document.getElementById('gMinus').addEventListener('click',function(){ guests=Math.max(1,guests-1); renderStay(); });
   document.getElementById('gPlus').addEventListener('click',function(){ guests=Math.min(MAXG,guests+1); renderStay(); });
-  function quote(){
-    if(!start||!end) return null;
-    var nights=Math.round((end-start)/864e5), sum=0, x=new Date(start), missing=0;
-    while(x<end){ var r=D[iso(x)]; if(r&&r.p>0) sum+=r.p; else missing++; x=addD(x,1); }
-    var rate=0; for(var i=0;i<DISC.length;i++){ if(nights>=DISC[i][0]){ rate=DISC[i][1]; break; } }
-    var disc=Math.round(sum*rate);
-    return {nights:nights,sum:sum,rate:rate,disc:disc,total:sum-disc,missing:missing};
-  }
   function renderStay(){
     document.getElementById('dIn').textContent=start?fmt(start):'—';
     document.getElementById('dOut').textContent=end?fmt(end):'—';
     document.getElementById('gN').textContent=guests;
-    var q=quote(), el=document.getElementById('quote'), btn=document.getElementById('reqBtn');
-    if(!q){ el.innerHTML='<p class="empty">'+t('empty')+'</p>'; btn.setAttribute('aria-disabled','true'); return; }
-    var html='<div class="lines"><div><span>'+q.nights+' '+t('nights')+' · '+guests+' '+(guests>1?t('guests'):t('guest'))+'</span><span>'+eur(q.sum)+'</span></div>';
-    if(q.rate) html+='<div class="disc"><span>'+t('disc')+' −'+Math.round(q.rate*100)+'%</span><span>−'+eur(q.disc)+'</span></div>';
-    html+='<div class="tot"><span>'+t('total')+'</span><span>'+eur(q.total)+'</span></div></div><p class="note">'+t('dep')+'</p>';
-    el.innerHTML=html; btn.setAttribute('aria-disabled','false');
+    var el=document.getElementById('summary'), btn=document.getElementById('airBtn');
+    if(!start||!end){ el.innerHTML='<p class="empty">'+t('empty')+'</p>'; if(btn){ btn.setAttribute('aria-disabled','true'); btn.href=AIRBNB; } return; }
+    var nights=Math.round((end-start)/864e5);
+    el.innerHTML='<div class="lines"><div><span>'+nights+' '+t('nights')+' · '+guests+' '+(guests>1?t('guests'):t('guest'))+'</span></div></div>';
+    if(btn){ btn.setAttribute('aria-disabled','false'); btn.href=AIRBNB+'?check_in='+iso(start)+'&check_out='+iso(end)+'&adults='+guests; }
   }
-  document.getElementById('reqBtn').addEventListener('click',function(e){ e.preventDefault(); if(this.getAttribute('aria-disabled')==='true') return; document.getElementById('reqForm').hidden=false; this.hidden=true; document.getElementById('fName').focus(); });
-  document.getElementById('reqForm').addEventListener('submit',function(e){
-    e.preventDefault(); var mail=document.getElementById('fMail').value||'…', name=document.getElementById('fName').value||'…';
-    blocks.push({a:iso(start),b:iso(end),src:'req',who:name+' · '+guests+' '+t('guests'),whoEn:name+' · '+guests+' guests'});
-    sentTo=mail; this.hidden=true; renderSent(); start=null; end=null; renderCal(); renderStay(); renderRows(); say('');
-  });
-  function renderSent(){ var s=document.getElementById('sent'); if(!sentTo){ s.hidden=true; return; } s.hidden=false; s.innerHTML='<b>'+t('sentT')+'</b>'+t('sentB').replace('{mail}',sentTo); }
-  /* owner view */
+  /* owner page: the list of what is booked or blocked, and the form that adds a private stay */
   var rows=document.getElementById('bkRows');
   function renderRows(){
     if(!rows) return; var list=blocks.slice().sort(function(x,y){ return x.a<y.a?-1:1; }); rows.innerHTML='';
@@ -139,8 +116,8 @@ function initCalendar(){
   }
   var af=document.getElementById('addForm'); if(af) af.addEventListener('submit',function(e){
     e.preventDefault(); var a=document.getElementById('aIn').value, b=document.getElementById('aOut').value; if(!a||!b||b<=a) return;
-    var type=document.getElementById('aType').value, name=document.getElementById('aName').value||(type==='own'?'Laure':'—');
-    blocks.push({a:a,b:b,src:type,who:name,whoEn:name}); this.reset(); renderCal(); renderRows(); say(''); msg.textContent=name+' '+t('added');
+    var name=document.getElementById('aName').value||'Laure';
+    blocks.push({a:a,b:b,src:'own',who:name,whoEn:name}); this.reset(); renderCal(); renderRows(); msg.textContent=name+' '+t('added');
   });
   renderCal(); renderStay(); renderRows(); say('pickIn');
 }

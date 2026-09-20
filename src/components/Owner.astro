@@ -20,7 +20,7 @@ const page = 'owner';
     <div class="rv">
       <h2>{t(`Espace propriétaire`,`Owner area`)}</h2>
       <p class="strap">{t(`ce que voit Laure une fois connectée`,`what Laure sees once logged in`)}</p>
-      <p class="lede">{t(`Tout ce qui est réservé ou bloqué, d'où que ça vienne, et un endroit pour ajouter vos propres séjours. Cette page sera protégée par un mot de passe.`,`Everything booked or blocked, wherever it came from, and a place to add your own stays. This page will sit behind a password.`)}</p>
+      <p class="lede">{t(`Les réservations Airbnb et vos séjours privés sur un seul calendrier, et un endroit pour bloquer des dates pour vous. Cette page sera protégée par un mot de passe.`,`Airbnb bookings and your private stays on one calendar, and a place to block dates for yourselves. This page will sit behind a password.`)}</p>
     </div>
   </div>
 </div></section>
@@ -29,36 +29,34 @@ const page = 'owner';
 <section class="owner" id="owner"><div class="wrap">
   <div class="rv">
     <h2>{t(`Le calendrier, côté cuisine`,`The calendar, from the kitchen side`)}</h2>
-    <p class="strap">{t(`réservations, blocages, et ce qui part vers Airbnb`,`bookings, blocks, and what goes out to Airbnb`)}</p>
+    <p class="strap">{t(`réservations Airbnb, séjours privés, et ce qui part vers Airbnb`,`Airbnb bookings, private stays, and what goes out to Airbnb`)}</p>
   </div>
   <div class="grid">
     <div>
-      <div class="panel rv"><h3>{t(`Réservations et blocages`,`Bookings and blocks`)}</h3><table class="bk-list"><thead><tr><th>{t(`Dates`,`Dates`)}</th><th>{t(`Qui`,`Who`)}</th><th>{t(`Source`,`Source`)}</th><th>{t(`Nuits`,`Nights`)}</th></tr></thead><tbody id="bkRows"></tbody></table></div>
-      <div class="panel rv" style="--i:1"><h3>{t(`Ajouter une réservation ou bloquer des dates`,`Add a booking or block dates`)}</h3>
+      <div class="panel rv"><h3>{t(`Réservations et séjours privés`,`Bookings and private stays`)}</h3><table class="bk-list"><thead><tr><th>{t(`Dates`,`Dates`)}</th><th>{t(`Qui`,`Who`)}</th><th>{t(`Source`,`Source`)}</th><th>{t(`Nuits`,`Nights`)}</th></tr></thead><tbody id="bkRows"></tbody></table></div>
+      <div class="panel rv" style="--i:1"><h3>{t(`Ajouter un séjour privé`,`Add a private stay`)}</h3>
         <form class="add" id="addForm">
           <label><span>{t(`Arrivée`,`Check-in`)}</span><input type="date" id="aIn" required></label>
           <label><span>{t(`Départ`,`Check-out`)}</span><input type="date" id="aOut" required></label>
-          <label><span>{t(`Type`,`Type`)}</span><select id="aType"><option value="own">{t(`Séjour perso ou famille`,`Own stay or family`)}</option><option value="dir">{t(`Réservation directe (payée)`,`Direct booking (paid)`)}</option></select></label>
-          <label><span>{t(`Nom`,`Name`)}</span><input type="text" id="aName" placeholder="…"></label>
-          <button class="pill outline full" type="submit"><span class="dot"><Fragment set:html={PLUS} /></span><span>{t(`Ajouter et fermer les dates sur Airbnb`,`Add and close the dates on Airbnb`)}</span></button>
+          <label class="full"><span>{t(`Qui, ou un mot`,`Who, or a note`)}</span><input type="text" id="aName" placeholder={t(`la famille, des amis, des travaux…`,`family, friends, works on the house…`)}></label>
+          <button class="pill outline full" type="submit"><span class="dot"><Fragment set:html={PLUS} /></span><span>{t(`Bloquer ces dates, ici et sur Airbnb`,`Block these dates, here and on Airbnb`)}</span></button>
         </form>
       </div>
     </div>
     <div>
       <div class="panel rv"><h3>{t(`Synchronisation`,`Sync`)}</h3>
         <div class="sync">
-          <div><i></i><span><span>{t(`Airbnb → site : le calendrier iCal d'Airbnb est relu toutes les heures ; PriceLabs en confirmation.`,`Airbnb → site: Airbnb's iCal calendar is re-read every hour; PriceLabs as a cross-check.`)}</span><small>{t(`dernière lecture : aujourd'hui 06:59`,`last read: today 06:59`)}</small></span></div>
-          <div><i></i><span><span>{t(`PriceLabs → site : prix par nuit et séjours minimum, les mêmes que sur Airbnb.`,`PriceLabs → site: nightly prices and minimum stays, the same as on Airbnb.`)}</span><small>{t(`dernière lecture : aujourd'hui 06:59`,`last read: today 06:59`)}</small></span></div>
-          <div><i class="amber"></i><span><span>{t(`Site → Airbnb : chaque réservation directe ou blocage part dans un calendrier iCal qu'Airbnb importe toutes les quelques heures.`,`Site → Airbnb: every direct booking or block goes into an iCal feed that Airbnb imports every few hours.`)}</span><small>{t(`à brancher : coller l'adresse du flux dans Airbnb, une fois`,`to connect: paste the feed address into Airbnb, once`)}</small></span></div>
-          <div><i class="amber"></i><span><span>{t(`Site → PriceLabs : le même flux iCal, pour que les prix tiennent compte des réservations directes. Tout se synchronise en iCal, dans les deux sens.`,`Site → PriceLabs: the same iCal feed, so pricing takes direct bookings into account. Everything syncs by iCal, both ways.`)}</span><small>{t(`à brancher`,`to connect`)}</small></span></div>
+          <div><i></i><span><span>{t(`Airbnb → site : le calendrier iCal d'Airbnb est relu toutes les heures, PriceLabs en confirmation. Les nuits réservées apparaissent ici.`,`Airbnb → site: Airbnb's iCal calendar is re-read every hour, with PriceLabs as a cross-check. Booked nights show up here.`)}</span><small>{t(`dernière lecture : aujourd'hui 06:59`,`last read: today 06:59`)}</small></span></div>
+          <div><i></i><span><span>{t(`PriceLabs → site : les séjours minimum par date d'arrivée, les mêmes que sur Airbnb, pour que le calendrier ne propose que ce qu'Airbnb acceptera.`,`PriceLabs → site: the minimum stay per check-in date, the same as on Airbnb, so the calendar only offers what Airbnb will accept.`)}</span><small>{t(`dernière lecture : aujourd'hui 06:59`,`last read: today 06:59`)}</small></span></div>
+          <div><i class="amber"></i><span><span>{t(`Site → Airbnb : chaque séjour privé part dans un calendrier iCal qu'Airbnb importe toutes les quelques heures, et les dates s'y ferment.`,`Site → Airbnb: every private stay goes into an iCal feed that Airbnb imports every few hours, and the dates close there.`)}</span><small>{t(`à brancher : coller l'adresse du flux dans Airbnb, une fois`,`to connect: paste the feed address into Airbnb, once`)}</small></span></div>
         </div>
       </div>
-      <div class="panel rv" style="--i:1"><h3>{t(`Ce qui est possible`,`What is possible`)}</h3>
+      <div class="panel rv" style="--i:1"><h3>{t(`Comment ça se tient`,`How it holds together`)}</h3>
         <ul class="plain">
-          <li>{t(`Airbnb n'a pas d'API pour un hôte particulier : le seul lien fiable dans les deux sens est le calendrier iCal (import et export), et PriceLabs pour les réservations, prix et séjours minimum.`,`Airbnb has no API for a private host: the only reliable link both ways is the iCal calendar (import and export), plus PriceLabs for bookings, prices and minimum stays.`)}</li>
-          <li>{t(`Une réservation directe ferme les dates sur Airbnb en quelques heures, pas à la seconde : le site peut donc garder une option de 24 h pendant que Laure confirme.`,`A direct booking closes the dates on Airbnb within hours, not instantly: so the site can hold a 24-hour option while Laure confirms.`)}</li>
-          <li>{t(`Vos propres séjours se bloquent ici, et partent vers Airbnb par le même chemin.`,`Your own stays are blocked here, and reach Airbnb by the same route.`)}</li>
-          <li>{t(`Paiement par Stripe (carte), caution bloquée par Swikly ; les remises longue durée se règlent ici, pas dans PriceLabs.`,`Payment by Stripe (card), deposit held by Swikly; long-stay discounts are set here, not in PriceLabs.`)}</li>
+          <li>{t(`Les voyageurs réservent et paient sur Airbnb : le prix, la caution, la protection et les annulations restent là-bas.`,`Guests book and pay on Airbnb: price, deposit, cover and cancellations stay there.`)}</li>
+          <li>{t(`Airbnb n'a pas d'API pour un hôte particulier : le lien fiable dans les deux sens est le calendrier iCal (import et export), et PriceLabs pour les réservations et les séjours minimum.`,`Airbnb has no API for a private host: the reliable link both ways is the iCal calendar (import and export), plus PriceLabs for bookings and minimum stays.`)}</li>
+          <li>{t(`Un séjour privé ajouté ici ferme les dates sur Airbnb en quelques heures, pas à la seconde.`,`A private stay added here closes the dates on Airbnb within hours, not instantly.`)}</li>
+          <li>{t(`Cette page sera derrière un mot de passe ; rien ici n'est visible des voyageurs.`,`This page will sit behind a password; nothing here is visible to guests.`)}</li>
         </ul>
       </div>
     </div>

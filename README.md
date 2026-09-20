@@ -1,6 +1,6 @@
 # Les Calades
 
-The direct-booking website for Les Calades, a village house with a pool in Lédenon (Gard). French first, every page also in English.
+The website for Les Calades, a village house with a pool in Lédenon (Gard). French first, every page also in English.
 
 Built with [Astro](https://astro.build), hosted on Netlify.
 
@@ -22,10 +22,14 @@ npm run preview
 - `src/data/`: `pricelabs.json` (a year of nightly prices and minimum stays read from PriceLabs), `bookings.json` (booked and blocked dates), `galleries.json` (which photos each room opens), `marquee.json` (the room-by-room row).
 - `public/img/`: the photos, numbered as in the original contact sheet.
 
+## How booking works
+
+Guests pick their dates on the site's calendar, which shows what is free and the minimum stay Airbnb applies to each check-in date, then a button opens the Airbnb listing with those dates and the party size filled in. Payment, deposit and cancellation stay on Airbnb. The owner page lets Laure add private stays, which will close the dates on Airbnb through an outgoing iCal feed.
+
 ## Still to come
 
-- Payment: Stripe Checkout for the deposit with the card saved, the balance charged automatically on the due date.
-- Live data: prices from PriceLabs and bookings from the Airbnb iCal feed on a schedule, and an outgoing iCal feed for Airbnb and PriceLabs.
+- Live data: bookings from the Airbnb iCal feed and minimum stays from PriceLabs on a schedule, instead of the JSON files in `src/data/`.
+- The outgoing iCal feed for private stays, and saving them somewhere other than the browser.
 - The owner area behind a password.
 - Live rating and review count from Airbnb.
 - The registration number (meublé de tourisme) in the footer, and the site's domain in `astro.config.mjs` (`site`) for absolute hreflang links.
