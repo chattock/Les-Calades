@@ -32,7 +32,16 @@ const cur = (p: Page) => (page === p ? 'page' : undefined);
     var gr=g.getBoundingClientRect(), fs=parseFloat(getComputedStyle(g).fontSize), t=1.6;
     var r=cells.map(function(b){var q=b.getBoundingClientRect();return {l:q.left-gr.left,r:q.right-gr.left,top:q.top-gr.top};});
     /* three treads and two risers: the first tread sits on the cap top of LES, the third has its underside on the LES baseline (Poppins: cap top .275em, baseline .975em at line-height 1.25) */
-    var y0=0.275*fs+t/2, y2=0.975*fs-t/2, step=(y2-y0)/2;
+    /* the L's baseline, probed in the DOM with an empty inline-block, and its cap height, read from the ink of an oversized canvas L */
+    var L=g.querySelector('b'), probe=document.createElement('span'); probe.style.cssText='display:inline-block;width:0;height:0;vertical-align:baseline'; L.appendChild(probe);
+    var base=probe.getBoundingClientRect().top-gr.top; L.removeChild(probe);
+    var cap=0.7*fs;
+    try { var sc=10, c=document.createElement('canvas'); c.width=Math.ceil(fs*sc*1.2); c.height=Math.ceil(fs*sc*1.6); var cx=c.getContext('2d'); var st=getComputedStyle(L);
+      cx.font=st.fontWeight+' '+(fs*sc)+'px '+st.fontFamily; cx.textBaseline='alphabetic'; var B=Math.round(fs*sc*1.2); cx.fillText('L',fs*sc*0.1,B);
+      var px=cx.getImageData(0,0,c.width,c.height).data, top=-1, bot=-1;
+      for(var y=0;y<c.height;y++){ for(var x=0;x<c.width;x++){ if(px[(y*c.width+x)*4+3]>40){ if(top<0) top=y; bot=y; break; } } }
+      if(top>=0){ cap=(B-top)/sc; base=base+(bot+1-B)/sc; } } catch(e){}
+    var y0=base-cap+t/2, y2=base-t/2, step=(y2-y0)/2;
     var x0=r[0].l, xEnd=(r[2].r+r[3].l)/2+dx[2], w=(xEnd-x0)/3; // the last tread ends in the E|S gap (james 19:15)
     var ext=0.5*step, ext0=0.18*step; // every tread runs on a little to the left: the lower ones past their riser, the first past the A
     var d='M'+(x0-ext0).toFixed(2)+' '+y0.toFixed(2)+'H'+(x0+w).toFixed(2)+'V'+(y0+step).toFixed(2);
