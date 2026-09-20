@@ -22,7 +22,6 @@ const home = page === 'home' ? '' : urls.home[lang]; // anchors stay on the home
         <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><a href={AIRBNB_MESSAGE} rel="noopener">{t(`Message sur Airbnb`,`Message us on Airbnb`)}</a></li>
       </ul></div>
       <div><h4>{t(`Le site`,`Quick links`)}</h4><ul>
-        <li><a href={urls.house[lang]}>{t(`La maison`,`The house`)}</a></li>
         <li><a href={urls.area[lang]}>{t(`Les alentours`,`The area`)}</a></li>
         <li><a href={urls.practical[lang]}>{t(`Infos pratiques`,`Practical information`)}</a></li>
         <li><a href={home + '#reviews'}>{t(`Les avis`,`Reviews`)}</a></li>

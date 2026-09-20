@@ -3,7 +3,7 @@ export const langs: Lang[] = ['fr', 'en'];
 /** Every page exists in both languages; these are the URLs, French first. */
 export const urls = {
   home: { fr: '/', en: '/en/' },
-  house: { fr: '/la-maison/', en: '/en/the-house/' },
+  house: { fr: '/', en: '/en/' }, // the house page was removed (james, 2026-09-20): the nav item goes home
   area: { fr: '/les-alentours/', en: '/en/the-area/' },
   practical: { fr: '/infos-pratiques/', en: '/en/practical/' },
   book: { fr: '/reserver/', en: '/en/book/' },
