@@ -1,0 +1,38 @@
+---
+import { t as T, urls, AIRBNB, type Lang, type Page } from '../i18n';
+import { ARROW, PLUS, PLUS_ICON, STAR } from '../icons';
+import LangSwitch from './LangSwitch.astro';
+interface Props { lang: Lang; page: Page }
+const { lang, page } = Astro.props;
+const t = T(lang);
+const home = page === 'home' ? '' : urls.home[lang]; // anchors stay on the home page, other pages link back to it
+import marquee from '../data/marquee.json';
+import galleries from '../data/galleries.json';
+const tour = galleries.tour.map((it) => it[0] as number); // the room-by-room order, so a tap opens the tour at that photo
+---
+<section class="dark" id="reviews">
+  <img src="/img/7.jpg" alt="" aria-hidden="true">
+  <div class="wrap">
+    <div class="top">
+      <div class="rv">
+        <h2>{t(`Aimée des voyageurs`,`Loved by the people who stay`)}</h2>
+        <p class="strap">{t(`merci à tous ceux qui sont venus`,`thank you to everyone who has come`)}</p>
+        <p class="body">{t(`Nous ne recopions pas les avis ici : lisez-les là où ils ont été écrits, puis choisissez vos dates.`,`We don't copy reviews onto this page: read them where they were written, then pick your dates.`)}</p>
+        <a class="pill primary" href={AIRBNB + '/reviews'} rel="noopener"><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Lire les avis sur Airbnb`,`Read the reviews on Airbnb`)}</span></a>
+      </div>
+      <div class="stats">
+        <div class="stat rv" style="--i:1"><b>4.88 <Fragment set:html={STAR} /></b><span>{t(`Note moyenne`,`Average rating`)}</span></div>
+        <div class="stat rv" style="--i:2"><b>32</b><span>{t(`Avis sur Airbnb`,`Reviews on Airbnb`)}</span></div>
+        <div class="stat rv" style="--i:3"><b>88%</b><span>{t(`Cinq étoiles`,`Five stars`)}</span></div>
+      </div>
+    </div>
+    <h3 class="sub rv" id="gallery">{t(`Pièce par pièce`,`Room by room`)}</h3>
+    <div class="marquee" data-gallery="tour"><div class="track">
+      {[...marquee, ...marquee].map((f) => (
+        <figure data-i={tour.indexOf(f.n)}><div class="photo"><img src={`/img/${f.n}.jpg`} alt={t(f.fr, f.en)} loading="lazy" draggable="false" /></div><figcaption>{t(f.fr, f.en)}</figcaption></figure>
+      ))}
+    </div></div>
+    <p class="hint rv">{t(`faites glisser, ou cliquez sur une photo`,`drag along, or click a photo to see it large`)}</p>
+  </div>
+</section>
+

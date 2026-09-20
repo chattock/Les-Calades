@@ -1,0 +1,155 @@
+---
+import { t as T, AIRBNB, WHATSAPP, type Lang, type Page } from '../i18n';
+import { ARROW } from '../icons';
+import prices from '../data/pricelabs.json';
+import bookings from '../data/bookings.json';
+interface Props { lang: Lang; page: Page; owner?: boolean }
+const { lang, page, owner = false } = Astro.props;
+const t = T(lang);
+---
+<section class="bk" id="book"><div class="wrap grid">
+  <div class="rv">
+    <div class="cal-head">
+      <h3 class="sub" style="font-size:.85rem;letter-spacing:.16em">{t(`Disponibilités`,`Availability`)}</h3>
+      <div class="arrs"><button class="arr" type="button" id="calPrev" aria-label="Previous months"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button><button class="arr" type="button" id="calNext" aria-label="Next months"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button></div>
+    </div>
+    <div class="months" id="months"></div>
+    <div class="legend">
+      <span><i class="sel"></i><span>{t(`vos dates`,`your dates`)}</span></span>
+      <span><i class="blk"></i><span>{t(`réservé sur Airbnb`,`booked on Airbnb`)}</span></span>
+      <span><i class="own"></i><span>{t(`séjour privé`,`private stay`)}</span></span>
+    </div>
+    <p class="msg" id="msg"></p>
+  </div>
+  <aside class="stay rv" style="--i:1" id="stay">
+    <h3>{t(`Votre séjour`,`Your stay`)}</h3>
+    <div class="dates">
+      <div><small>{t(`Arrivée`,`Check-in`)}</small><b id="dIn">—</b></div>
+      <div><small>{t(`Départ`,`Check-out`)}</small><b id="dOut">—</b></div>
+    </div>
+    <div class="guests"><span>{t(`Voyageurs`,`Guests`)}</span><span class="step"><button type="button" id="gMinus" aria-label="Fewer guests">−</button><span id="gN">2</span><button type="button" id="gPlus" aria-label="More guests">+</button></span></div>
+    <div id="summary"></div>
+    {!owner && <div class="cta"><a class="pill primary" href={AIRBNB} id="airBtn" aria-disabled="true" rel="noopener"><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Réserver sur Airbnb`,`Book on Airbnb`)}</span></a><a class="pill outline" href={WHATSAPP} id="waBtn" rel="noopener"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.8A8 8 0 1 1 8.2 19z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 1a4 4 0 0 1-2-2l1-1-1-2z"/></svg></span><span>{t(`Message WhatsApp`,`Message on WhatsApp`)}</span></a></div>}
+    {!owner && <p class="note">{t(`Le bouton Airbnb ouvre notre annonce avec vos dates et votre nombre de voyageurs. Le prix exact, le paiement, la caution et les conditions d'annulation sont là-bas. Les prix se discutent : envoyez-nous un message sur WhatsApp avant de réserver.`,`The Airbnb button opens our listing with your dates and party size filled in. The exact price, payment, deposit and cancellation terms are there. Prices are negotiable: send us a message on WhatsApp before you book.`)}</p>}
+  </aside>
+</div></section>
+
+<script is:inline define:vars={{ D: prices, SEED: bookings, AIRBNB, OWNER: owner }}>
+/* runs once the whole page is parsed: the owner page adds its table and form after this component */
+function initCalendar(){
+  var WEEK=7, MAXG=10, API='/api/calendar', OWNER_API='/api/owner/stays', KEY='lc-owner';
+  var blocks=SEED.slice(); /* what the build knew; replaced by the live answer when it comes */
+  var T={fr:{pickIn:'choisissez votre date d’arrivée',pickOut:'maintenant le départ, une semaine au moins',min:'pour cette arrivée, Airbnb demande {n} nuits au moins',cross:'ces dates passent sur une nuit déjà réservée',ok:'c’est libre : réservez ces dates sur Airbnb',nights:'nuits',empty:'Vos dates d’abord, puis Airbnb vous donne le prix de ce séjour.',guest:'voyageur',guests:'voyageurs',own:'Séjour privé',air:'Airbnb',mon:['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],dow:['L','M','M','J','V','S','D'],added:'ajouté ; les dates se ferment sur Airbnb à son prochain import',removed:'retiré ; Airbnb rouvre les dates à son prochain import',del:'Retirer',wrongPw:'ce n’est pas le bon mot de passe',offline:'le serveur ne répond pas ; réessayez dans un instant',live:'lu à {t}',stale:'Airbnb injoignable ; dernière lecture {t}',never:'jamais lu encore',noUrl:'à brancher : l’adresse d’export Airbnb manque dans les réglages du site'},
+         en:{pickIn:'choose your check-in date',pickOut:'now the check-out, a week at least',min:'for that check-in, Airbnb asks for {n} nights at least',cross:'those dates cross a night that is already booked',ok:'it is free: book those dates on Airbnb',nights:'nights',empty:'Your dates first, then Airbnb gives you the price for that stay.',guest:'guest',guests:'guests',own:'Private stay',air:'Airbnb',mon:['January','February','March','April','May','June','July','August','September','October','November','December'],dow:['M','T','W','T','F','S','S'],added:'added; the dates close on Airbnb at its next import',removed:'removed; Airbnb reopens the dates at its next import',del:'Remove',wrongPw:'that is not the password',offline:'the server is not answering; try again in a moment',live:'read at {t}',stale:'Airbnb unreachable; last read {t}',never:'never read yet',noUrl:'to connect: the Airbnb export address is missing from the site settings'}};
+  function L(){ return document.documentElement.getAttribute('data-lang')==='en'?'en':'fr'; }
+  function t(k){ return T[L()][k]; }
+  var today=new Date(); today.setHours(0,0,0,0);
+  function iso(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function parse(s){ var p=s.split('-'); return new Date(+p[0],+p[1]-1,+p[2]); }
+  function addD(d,n){ var x=new Date(d); x.setDate(x.getDate()+n); return x; }
+  function blockOf(s){ for(var i=0;i<blocks.length;i++){ if(s>=blocks[i].a&&s<blocks[i].b) return blocks[i]; } return null; }
+  /* the minimum stay Airbnb applies to a check-in date comes from PriceLabs; a week is the floor everywhere */
+  function minFor(s){ var r=D[s]; return Math.max(WEEK, (r&&r.m)||0); }
+  function fmt(d){ return d.toLocaleDateString(L()==='fr'?'fr-FR':'en-GB',{weekday:'short',day:'numeric',month:'short'}); }
+  function when(ms){ return new Date(ms).toLocaleString(L()==='fr'?'fr-FR':'en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); }
+  var keys=Object.keys(D).sort(), lastMonth=parse(keys[keys.length-1]); lastMonth=new Date(lastMonth.getFullYear(),lastMonth.getMonth(),1);
+  var view=new Date(today.getFullYear(),today.getMonth(),1), start=null, end=null, guests=2;
+  var months=document.getElementById('months'), msg=document.getElementById('msg');
+  function say(k,n){ msg.textContent=k?t(k).replace('{n}',n):''; }
+  function renderCal(){
+    months.innerHTML='';
+    for(var m=0;m<2;m++){
+      var first=new Date(view.getFullYear(),view.getMonth()+m,1), sec=document.createElement('div'); sec.className='month';
+      var h=document.createElement('h3'); h.textContent=(t('mon')[first.getMonth()]+' '+first.getFullYear()).toUpperCase(); sec.appendChild(h);
+      var dow=document.createElement('div'); dow.className='dow'; t('dow').forEach(function(x){ var s=document.createElement('span'); s.textContent=x; dow.appendChild(s); }); sec.appendChild(dow);
+      var days=document.createElement('div'); days.className='days';
+      var pad=(first.getDay()+6)%7; for(var p=0;p<pad;p++){ var e=document.createElement('div'); e.className='day pad'; days.appendChild(e); }
+      var n=new Date(first.getFullYear(),first.getMonth()+1,0).getDate();
+      for(var d=1;d<=n;d++){
+        var dt=new Date(first.getFullYear(),first.getMonth(),d), s=iso(dt), cell=document.createElement('button'); cell.type='button'; cell.className='day'; cell.textContent=d; cell.setAttribute('data-d',s);
+        var b=blockOf(s);
+        if(dt<=today){ cell.classList.add('past'); cell.disabled=true; }
+        else if(b){ cell.classList.add(b.src==='own'?'own':'blk'); cell.disabled=true; cell.title=(L()==='en'&&b.whoEn)?b.whoEn:b.who; }
+        else cell.classList.add('free');
+        if(start&&s===iso(start)) cell.classList.add('start');
+        if(end&&s===iso(end)) cell.classList.add('end');
+        if(start&&end&&dt>start&&dt<end) cell.classList.add('in');
+        days.appendChild(cell);
+      }
+      sec.appendChild(days); months.appendChild(sec);
+    }
+    document.getElementById('calPrev').disabled = view<=new Date(today.getFullYear(),today.getMonth(),1);
+    document.getElementById('calNext').disabled = view>=new Date(lastMonth.getFullYear(),lastMonth.getMonth()-1,1);
+  }
+  months.addEventListener('click',function(e){
+    var c=e.target.closest('.day'); if(!c||c.disabled||c.classList.contains('pad')) return;
+    var d=parse(c.getAttribute('data-d'));
+    if(!start||(start&&end)||d<=start){ start=d; end=null; say('pickOut'); }
+    else {
+      var nights=Math.round((d-start)/864e5), need=minFor(iso(start));
+      if(nights<need){ say('min', need); }
+      else { var x=new Date(start), clash=false; while(x<d){ if(blockOf(iso(x))){ clash=true; break; } x=addD(x,1); }
+        if(clash){ say('cross'); } else { end=d; say('ok'); } }
+    }
+    renderCal(); renderStay();
+  });
+  document.getElementById('calPrev').addEventListener('click',function(){ view=new Date(view.getFullYear(),view.getMonth()-2,1); renderCal(); });
+  document.getElementById('calNext').addEventListener('click',function(){ view=new Date(view.getFullYear(),view.getMonth()+2,1); renderCal(); });
+  document.getElementById('gMinus').addEventListener('click',function(){ guests=Math.max(1,guests-1); renderStay(); });
+  document.getElementById('gPlus').addEventListener('click',function(){ guests=Math.min(MAXG,guests+1); renderStay(); });
+  function renderStay(){
+    document.getElementById('dIn').textContent=start?fmt(start):'—';
+    document.getElementById('dOut').textContent=end?fmt(end):'—';
+    document.getElementById('gN').textContent=guests;
+    var el=document.getElementById('summary'), btn=document.getElementById('airBtn');
+    if(!start||!end){ el.innerHTML='<p class="empty">'+t('empty')+'</p>'; if(btn){ btn.setAttribute('aria-disabled','true'); btn.href=AIRBNB; } return; }
+    var nights=Math.round((end-start)/864e5);
+    el.innerHTML='<div class="lines"><div><span>'+nights+' '+t('nights')+' · '+guests+' '+(guests>1?t('guests'):t('guest'))+'</span></div></div>';
+    if(btn){ btn.setAttribute('aria-disabled','false'); btn.href=AIRBNB+'?check_in='+iso(start)+'&check_out='+iso(end)+'&adults='+guests; }
+  }
+
+  /* the live calendar: Airbnb's bookings plus the private stays, from the site's own function */
+  var syncAir=document.getElementById('syncAir');
+  function useLive(data){
+    if(!data||!Array.isArray(data.blocks)) return;
+    blocks=data.blocks; renderCal(); renderRows();
+    if(syncAir&&data.airbnb){ var a=data.airbnb; syncAir.textContent=!a.configured?t('noUrl'):(a.ok?t('live').replace('{t}',when(a.at)):(a.at?t('stale').replace('{t}',when(a.at)):t('never'))); var dot=syncAir.parentNode.parentNode.querySelector('i'); if(dot) dot.className=(a.configured&&a.ok)?'':'amber'; }
+  }
+  function refresh(){ return fetch(API,{cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).then(useLive).catch(function(){}); }
+
+  /* owner page: the list of what is booked or blocked, and the form that adds a private stay */
+  var rows=document.getElementById('bkRows');
+  function renderRows(){
+    if(!rows) return; var list=blocks.slice().sort(function(x,y){ return x.a<y.a?-1:1; }); rows.innerHTML='';
+    list.forEach(function(b){ var n=Math.round((parse(b.b)-parse(b.a))/864e5), tr=document.createElement('tr');
+      tr.innerHTML='<td>'+fmt(parse(b.a))+' → '+fmt(parse(b.b))+'</td><td>'+((L()==='en'&&b.whoEn)?b.whoEn:b.who)+'</td><td><span class="tag '+b.src+'">'+t(b.src)+'</span></td><td>'+n+(b.id&&b.src==='own'?' <button type="button" class="del" data-del="'+b.id+'" aria-label="'+t('del')+'">×</button>':'')+'</td>'; rows.appendChild(tr); });
+  }
+  function token(){ try{ return sessionStorage.getItem(KEY)||''; }catch(e){ return ''; } }
+  function ownerFetch(method,body,query){ return fetch(OWNER_API+(query||''),{method:method,headers:{'authorization':'Bearer '+token(),'content-type':'application/json'},body:body?JSON.stringify(body):undefined}); }
+  var af=document.getElementById('addForm'); if(af) af.addEventListener('submit',function(e){
+    e.preventDefault(); var a=document.getElementById('aIn').value, b=document.getElementById('aOut').value; if(!a||!b||b<=a) return;
+    var name=document.getElementById('aName').value||'Laure', form=this;
+    ownerFetch('POST',{a:a,b:b,who:name}).then(function(r){ if(!r.ok) throw new Error(r.status); form.reset(); msg.textContent=name+' '+t('added'); return refresh(); }).catch(function(){ msg.textContent=t('offline'); });
+  });
+  if(rows) rows.addEventListener('click',function(e){
+    var b=e.target.closest('[data-del]'); if(!b) return;
+    ownerFetch('DELETE',null,'?id='+encodeURIComponent(b.getAttribute('data-del'))).then(function(r){ if(!r.ok) throw new Error(r.status); msg.textContent=t('removed'); return refresh(); }).catch(function(){ msg.textContent=t('offline'); });
+  });
+
+  /* the owner page opens with a password; the password only ever travels to the site's own function */
+  var login=document.getElementById('login'), area=document.getElementById('ownerArea');
+  function unlock(){ if(login) login.hidden=true; if(area) area.hidden=false; renderCal(); refresh(); }
+  if(login){
+    login.addEventListener('submit',function(e){
+      e.preventDefault(); var pw=document.getElementById('pw').value, err=document.getElementById('pwErr');
+      try{ sessionStorage.setItem(KEY,pw); }catch(x){}
+      ownerFetch('GET').then(function(r){ if(r.status===401){ err.textContent=t('wrongPw'); try{ sessionStorage.removeItem(KEY); }catch(x){} return; } if(!r.ok) throw new Error(r.status); unlock(); }).catch(function(){ err.textContent=t('offline'); });
+    });
+    var feed=document.getElementById('feedUrl'); if(feed) feed.textContent=location.origin+'/calendar.ics';
+    if(token()){ ownerFetch('GET').then(function(r){ if(r.ok) unlock(); }).catch(function(){}); }
+  }
+  renderCal(); renderStay(); renderRows(); say('pickIn');
+  if(!OWNER) refresh();
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initCalendar); else initCalendar();
+</script>

@@ -1,0 +1,23 @@
+---
+import { t as T, urls, type Lang, type Page } from '../i18n';
+import { ARROW, PLUS, PLUS_ICON, STAR } from '../icons';
+import LangSwitch from './LangSwitch.astro';
+import Nav from './Nav.astro';
+interface Props { lang: Lang; page: Page }
+const { lang, page } = Astro.props;
+const t = T(lang);
+const home = page === 'home' ? '' : urls.home[lang]; // anchors stay on the home page, other pages link back to it
+---
+<header class="poster" id="top">
+  <Nav lang={lang} page={page} />
+  <div class="image"><img src="/img/1.jpg" alt="La piscine des Calades, entourée de murs de pierre, avec le château de Lédenon sur la colline derrière"></div>
+  <div class="plane"></div>
+  <div class="plane-inner">
+    <h1 class="title"><span class="over" aria-hidden="true">Les Calades</span><span class="under">Les Calades</span></h1>
+    <p class="strap">{t(`Lédenon, sur la colline, sous le château`,`Lédenon, on the hill, under the château`)}</p>
+    <div class="foot-line">
+      <span>{t(`Lédenon, Gard · 10 personnes · 4 chambres · piscine privée`,`Lédenon, Gard · sleeps 10 · 4 bedrooms · private pool`)}</span>
+      <a class="pill primary" href={urls.book[lang]}><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Voir les dates`,`Check dates`)}</span></a>
+    </div>
+  </div>
+</header>

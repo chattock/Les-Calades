@@ -1,0 +1,68 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from './Nav.astro';
+import Calendar from './Calendar.astro';
+import Footer from './Footer.astro';
+import '../styles/book.css';
+import { t as T, type Lang } from '../i18n';
+import { ARROW, PLUS } from '../icons';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = T(lang);
+const page = 'owner';
+---
+<Base lang={lang} page={page} noindex title={t('Espace propriétaire · Les Calades', 'Owner area · Les Calades')} description={t('Calendrier et réservations des Calades, côté propriétaire.', 'Les Calades calendar and bookings, owner side.')}>
+  <header class="masthead" id="top">
+    <Nav lang={lang} page={page} />
+  </header>
+<section class="bk-head"><div class="wrap">
+  <div class="row">
+    <div class="rv">
+      <h2>{t(`Espace propriétaire`,`Owner area`)}</h2>
+      <p class="strap">{t(`ce que voit Laure une fois connectée`,`what Laure sees once logged in`)}</p>
+      <p class="lede">{t(`Les réservations Airbnb et vos séjours privés sur un seul calendrier, et un endroit pour bloquer des dates pour vous.`,`Airbnb bookings and your private stays on one calendar, and a place to block dates for yourselves.`)}</p>
+    </div>
+    <form class="login rv" id="login" style="--i:1" autocomplete="on">
+      <label for="pw">{t(`Mot de passe`,`Password`)}</label>
+      <div class="field"><input type="password" id="pw" name="password" autocomplete="current-password" required><button class="pill primary" type="submit"><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Entrer`,`Enter`)}</span></button></div>
+      <p class="err" id="pwErr" aria-live="polite"></p>
+    </form>
+  </div>
+</div></section>
+
+<div id="ownerArea" hidden>
+  <Calendar lang={lang} page={page} owner />
+<section class="owner" id="owner"><div class="wrap">
+  <div class="rv">
+    <h2>{t(`Le calendrier, côté cuisine`,`The calendar, from the kitchen side`)}</h2>
+    <p class="strap">{t(`réservations Airbnb, séjours privés, et ce qui part vers Airbnb`,`Airbnb bookings, private stays, and what goes out to Airbnb`)}</p>
+  </div>
+  <div class="grid">
+    <div>
+      <div class="panel rv"><h3>{t(`Réservations et séjours privés`,`Bookings and private stays`)}</h3><table class="bk-list"><thead><tr><th>{t(`Dates`,`Dates`)}</th><th>{t(`Qui`,`Who`)}</th><th>{t(`Source`,`Source`)}</th><th>{t(`Nuits`,`Nights`)}</th></tr></thead><tbody id="bkRows"></tbody></table><p class="airline"><small id="syncAir">…</small></p></div>
+      <div class="panel rv" style="--i:1"><h3>{t(`Ajouter un séjour privé`,`Add a private stay`)}</h3>
+        <form class="add" id="addForm">
+          <label><span>{t(`Arrivée`,`Check-in`)}</span><input type="date" id="aIn" required></label>
+          <label><span>{t(`Départ`,`Check-out`)}</span><input type="date" id="aOut" required></label>
+          <label class="full"><span>{t(`Qui, ou un mot`,`Who, or a note`)}</span><input type="text" id="aName" placeholder={t(`la famille, des amis, des travaux…`,`family, friends, works on the house…`)}></label>
+          <button class="pill outline full" type="submit"><span class="dot"><Fragment set:html={PLUS} /></span><span>{t(`Bloquer ces dates`,`Block these dates`)}</span></button>
+        </form>
+      </div>
+    </div>
+    <div>
+      </div>
+      <div class="panel rv"><h3>{t(`Comment ça se tient`,`How it holds together`)}</h3>
+        <ul class="plain">
+          <li>{t(`Les voyageurs réservent et paient sur Airbnb : le prix, la caution, la protection et les annulations restent là-bas.`,`Guests book and pay on Airbnb: price, deposit, cover and cancellations stay there.`)}</li>
+          <li>{t(`Airbnb n'a pas d'API pour un hôte particulier : le lien fiable dans les deux sens est le calendrier iCal (import et export).`,`Airbnb has no API for a private host: the reliable link both ways is the iCal calendar (import and export).`)}</li>
+          <li>{t(`Un séjour privé ajouté ici ferme les dates sur Airbnb en quelques heures, pas à la seconde. Retirez-le avec la croix, et les dates se rouvrent.`,`A private stay added here closes the dates on Airbnb within hours, not instantly. Remove it with the cross, and the dates reopen.`)}</li>
+          <li>{t(`Le mot de passe se change dans les réglages du site, pas dans le code. Rien ici n'est visible des voyageurs.`,`The password is changed in the site settings, not in the code. Nothing here is visible to guests.`)}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div></section>
+</div>
+
+  <Footer lang={lang} page={page} />
+</Base>

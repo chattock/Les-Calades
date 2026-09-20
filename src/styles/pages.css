@@ -1,0 +1,92 @@
+/* the house, the area and practical pages */
+.facts{background:var(--paper);padding:calc(var(--sec)*.5) 0}
+.facts .row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem 2rem;padding-bottom:2.2rem;border-bottom:1px solid var(--rule)}
+.facts .row b{display:block;font-size:2rem;font-weight:800;line-height:1}
+.facts .row span{display:block;font-size:.88rem;color:var(--ink-2);font-style:italic;margin-top:.35rem}
+.chips{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:2rem;padding:0;list-style:none}
+.chips li{border:1px solid var(--olive-deep);color:var(--olive-deep);border-radius:999px;padding:.45rem 1rem;font-size:.82rem;font-weight:500;letter-spacing:.02em}
+/* rooms: text beside a three-photo mosaic, sides swapping down the page */
+.rooms{background:var(--cream)}
+.rooms .intro{padding-bottom:calc(var(--sec)*.25)}
+.rooms .intro .lede{max-width:52ch}
+.room{display:grid;grid-template-columns:1fr 1.25fr;gap:clamp(2rem,6vw,5rem);align-items:center;padding:calc(var(--sec)*.45) 0}
+.room+.room{border-top:1px solid var(--rule)}
+.room:nth-child(even) .txt{order:2}
+.room h3{font-size:1.35rem;letter-spacing:.01em}
+.room .strap{font-size:1.3rem;margin-top:.3rem}
+.room p.body{margin:1rem 0 1.4rem;color:var(--ink-2);max-width:40ch}
+.room .beds{list-style:none;margin:0 0 1.4rem;padding:0;display:grid;gap:.35rem;font-size:.92rem}
+.room .beds li{padding-left:1.1rem;position:relative} .room .beds li::before{content:"";position:absolute;left:0;top:.62rem;width:6px;height:6px;border-radius:50%;background:var(--olive-deep)}
+.mosaic{display:grid;grid-template-columns:1.6fr 1fr;grid-template-rows:1fr 1fr;gap:.8rem;cursor:pointer}
+.mosaic .photo:first-child{grid-row:1/3}
+.mosaic .photo{aspect-ratio:4/3}
+.mosaic .photo:first-child{aspect-ratio:auto;min-height:100%}
+.mosaic .photo:nth-child(2){aspect-ratio:4/3}
+/* the plain truths */
+.plain-truths{background:var(--paper)}
+.plain-truths .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem;margin-top:2.6rem}
+.truth{border-top:2px solid var(--olive-deep);padding-top:1.2rem}
+.truth h3{font-size:1rem;letter-spacing:.04em;margin-bottom:.5rem}
+.truth p{font-size:.95rem;color:var(--ink-2)}
+/* the area */
+.village .grid{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(2.5rem,7vw,7rem);align-items:center}
+.village .duo{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;align-items:end}
+.village .duo .photo:first-child{aspect-ratio:3/4} .village .duo .photo:last-child{aspect-ratio:3/4;margin-top:2.5rem}
+.village p.body{margin:1.2rem 0 0;color:var(--ink-2)}
+.places{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-top:2.6rem}
+.place{background:rgba(255,255,255,.08);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:1.3rem 1.4rem;color:#fff}
+.place b{display:block;font-family:var(--ff-script);font-weight:400;font-size:1.35rem;color:#EDE6D3;margin-bottom:.3rem}
+.place h3{font-size:.95rem;letter-spacing:.06em;margin-bottom:.45rem}
+.place p{font-size:.88rem;color:rgba(255,255,255,.85);max-width:none}
+.daily{background:var(--cream)}
+.daily .grid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(2.5rem,7vw,7rem);align-items:start}
+.daily .photo{aspect-ratio:4/5}
+.getting{background:var(--paper)}
+.getting .list{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem 2.5rem;margin-top:2.4rem}
+.getting .list h3{font-size:.85rem;letter-spacing:.14em;margin-bottom:.7rem}
+.getting .list p{font-size:.95rem;color:var(--ink-2)}
+.approach{display:grid;grid-template-columns:1.15fr .55fr 1fr;gap:2rem 2.5rem;margin-top:3.2rem;padding-top:2.6rem;border-top:1px solid var(--line,rgba(0,0,0,.1));align-items:start}
+.approach h3{font-size:.85rem;letter-spacing:.14em;margin-bottom:.9rem}
+.approach p{font-size:.95rem;color:var(--ink-2);margin:0 0 .8rem}
+.approach .warn{color:var(--ink);font-weight:500}
+.approach ol{margin:.4rem 0 0;padding-left:1.3rem;font-size:.95rem;color:var(--ink-2);display:grid;gap:.45rem}
+.approach figure{margin:0}
+.approach .photo{border-radius:var(--radius,18px);overflow:hidden}
+.approach .photo img{display:block;width:100%;height:100%;object-fit:cover}
+.approach .photo.map{aspect-ratio:320/581}
+.approach figure:last-child .photo{aspect-ratio:4/3}
+.approach figcaption{font-family:var(--ff-script);color:var(--strap-ink);font-size:1.2rem;margin-top:.6rem}
+section.tiles-sec{padding-top:0}
+.tiles-sec .tiles{margin-top:0}
+p.center{max-width:none}
+/* practical */
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:2.6rem}
+.tile{background:var(--paper);border-radius:14px;padding:1.5rem 1.5rem 1.6rem}
+.tile h3{font-size:.85rem;letter-spacing:.16em;margin-bottom:.9rem}
+.tile p,.tile li{font-size:.93rem;line-height:1.55}
+.tile p+p{margin-top:.6rem}
+.tile ul{list-style:none;margin:0;padding:0;display:grid;gap:.45rem}
+.tile li{padding-left:1.1rem;position:relative} .tile li::before{content:"";position:absolute;left:0;top:.62rem;width:6px;height:6px;border-radius:50%;background:var(--olive-deep)}
+.tile .script{font-family:var(--ff-script);color:var(--strap-ink);font-size:1.25rem;line-height:1.3;margin-top:.8rem}
+.contact{background:var(--paper)}
+.contact .grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2.5rem,7vw,7rem);align-items:center}
+.contact .photo{aspect-ratio:4/3}
+.contact .actions{margin-top:1.8rem}
+.contact p.body{margin-top:1.2rem;color:var(--ink-2)}
+.wide-photo{position:relative;height:clamp(320px,55vh,620px);overflow:hidden}
+.wide-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 60%}
+.wide-photo figcaption{position:absolute;left:var(--gutter);bottom:1.4rem;color:#fff;font-family:var(--ff-script);font-size:1.4rem;text-shadow:0 2px 14px rgba(0,0,0,.5)}
+@media (max-width:980px){
+  .facts .row{grid-template-columns:repeat(2,1fr)}
+  .room{grid-template-columns:1fr} .room:nth-child(even) .txt{order:0}
+  .plain-truths .grid,.tiles,.getting .list{grid-template-columns:1fr 1fr}
+  .approach{grid-template-columns:1fr 1fr} .approach .txt{grid-column:1/-1}
+  .village .grid,.daily .grid,.contact .grid{grid-template-columns:1fr}
+  .places{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  .plain-truths .grid,.tiles,.getting .list,.places,.approach{grid-template-columns:1fr}
+  .approach .photo.map{max-width:280px}
+  .mosaic{grid-template-columns:1fr 1fr}
+  .mosaic .photo:first-child{grid-column:1/3;grid-row:1;aspect-ratio:3/2;min-height:0}
+}

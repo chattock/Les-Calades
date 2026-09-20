@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from './Hero.astro';
+import Cards from './Cards.astro';
+import Features from './Features.astro';
+import Reviews from './Reviews.astro';
+import Host from './Host.astro';
+import Faq from './Faq.astro';
+import Footer from './Footer.astro';
+import Lightbox from './Lightbox.astro';
+import { t as T, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = T(lang);
+const page = 'home';
+---
+<Base lang={lang} page={page} title="Les Calades · Lédenon" description={t('Maison de village en pierre à Lédenon, dans le Gard : quatre chambres, piscine privée, terrasses, dix personnes. Choisissez vos dates.', 'Stone village house in Lédenon, in the Gard: four bedrooms, private pool, terraces, sleeps ten. Pick your dates.')}>
+  <Hero lang={lang} page={page} />
+  <Cards lang={lang} page={page} />
+  <Features lang={lang} page={page} />
+  <Reviews lang={lang} page={page} />
+  <Host lang={lang} page={page} />
+  <Faq lang={lang} page={page} />
+  <Footer lang={lang} page={page} />
+  <Lightbox />
+</Base>

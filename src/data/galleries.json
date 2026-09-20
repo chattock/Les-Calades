@@ -1,0 +1,555 @@
+{
+"pool": [
+[
+1,
+"",
+""
+],
+[
+2,
+"",
+""
+],
+[
+3,
+"",
+""
+],
+[
+60,
+"",
+""
+],
+[
+4,
+"",
+""
+]
+],
+"kitchen": [
+[
+28,
+"",
+""
+],
+[
+29,
+"",
+""
+],
+[
+30,
+"",
+""
+]
+],
+"terraces": [
+[
+31,
+"",
+""
+],
+[
+6,
+"",
+""
+],
+[
+32,
+"",
+""
+],
+[
+45,
+"",
+""
+],
+[
+50,
+"",
+""
+],
+[
+12,
+"",
+""
+],
+[
+13,
+"",
+""
+],
+[
+14,
+"",
+""
+],
+[
+56,
+"",
+""
+]
+],
+"sitting": [
+[
+18,
+"",
+""
+],
+[
+19,
+"",
+""
+],
+[
+20,
+"",
+""
+],
+[
+61,
+"",
+""
+]
+],
+"master": [
+[
+34,
+"",
+""
+],
+[
+35,
+"",
+""
+],
+[
+62,
+"",
+""
+],
+[
+36,
+"",
+""
+],
+[
+37,
+"",
+""
+],
+[
+38,
+"",
+""
+],
+[
+39,
+"",
+""
+]
+],
+"fourposter": [
+[
+24,
+"",
+""
+],
+[
+25,
+"",
+""
+],
+[
+26,
+"",
+""
+],
+[
+22,
+"",
+""
+]
+],
+"fireplace": [
+[
+16,
+"",
+""
+],
+[
+15,
+"",
+""
+],
+[
+17,
+"",
+""
+]
+],
+"phbed": [
+[
+46,
+"",
+""
+],
+[
+10,
+"",
+""
+],
+[
+11,
+"",
+""
+]
+],
+"phkitchen": [
+[
+9,
+"",
+""
+],
+[
+8,
+"",
+""
+]
+],
+"tour": [
+[
+5,
+"l'entrée de la grande terrasse",
+"entrance to the main terrace"
+],
+[
+18,
+"le salon",
+"the sitting room"
+],
+[
+19,
+"le salon, l'escalier vers la chambre principale",
+"the sitting room, stairs leading up to the master bedroom"
+],
+[
+28,
+"la vieille cuisine",
+"the old kitchen"
+],
+[
+29,
+"la vieille cuisine",
+"the old kitchen"
+],
+[
+31,
+"la terrasse sous la vigne",
+"the terrace under the vine"
+],
+[
+6,
+"la grande terrasse, près de la chambre principale",
+"the main terrace, next to the master bedroom"
+],
+[
+32,
+"la terrasse sous la vigne",
+"the terrace under the vine"
+],
+[
+12,
+"la cour du pool house",
+"the pool house courtyard"
+],
+[
+13,
+"la table dressée",
+"the table laid"
+],
+[
+24,
+"la chambre au baldaquin",
+"the four-poster bedroom"
+],
+[
+25,
+"la chambre au baldaquin",
+"the four-poster bedroom"
+],
+[
+34,
+"la chambre principale",
+"the master bedroom"
+],
+[
+35,
+"la chambre principale et sa salle de bain",
+"the master bedroom and bath"
+],
+[
+62,
+"la chambre principale, et la vue",
+"the master bedroom, and the view"
+],
+[
+16,
+"la chambre à la cheminée",
+"the fireplace room"
+],
+[
+17,
+"le bureau près de la cheminée",
+"the desk by the fireplace"
+],
+[
+37,
+"la salle de bain principale",
+"the master bathroom"
+],
+[
+38,
+"la salle de bain principale",
+"the master bathroom"
+],
+[
+39,
+"la douche à l'italienne de la salle de bain principale",
+"the master bathroom's walk-in shower"
+],
+[
+22,
+"la salle de bain près de la chambre au baldaquin",
+"bathroom next to the four-poster bedroom"
+],
+[
+9,
+"la cuisine du pool house, vers le jardin",
+"the pool house kitchen, towards the garden"
+],
+[
+8,
+"la cuisine du pool house",
+"the pool house kitchen"
+],
+[
+46,
+"la chambre du pool house",
+"the pool house bedroom"
+],
+[
+10,
+"le lit simple de la chambre du pool house",
+"the single bed in the pool house bedroom"
+],
+[
+1,
+"la piscine, le château derrière",
+"the pool, with the château behind"
+],
+[
+2,
+"la piscine dans la longueur",
+"the pool lengthways"
+],
+[
+3,
+"la piscine et la plaine",
+"the pool and the plain beyond"
+],
+[
+60,
+"la piscine et les transats",
+"the pool and the loungers"
+],
+[
+7,
+"la vue sur les toits",
+"the view over the roofs"
+],
+[
+40,
+"la vue depuis la maison",
+"the view from the house"
+],
+[
+33,
+"la vieille maison, de face",
+"the old house from the front"
+],
+[
+43,
+"les calades",
+"les calades"
+],
+[
+44,
+"les toits du village et la plaine",
+"the village roofs and the plain"
+],
+[
+47,
+"le portail sous le figuier",
+"the gate under the fig tree"
+],
+[
+48,
+"les marches de pierre",
+"the stone steps"
+],
+[
+57,
+"l'œil-de-bœuf",
+"the oval window"
+]
+],
+"garden": [
+[
+58,
+"",
+""
+],
+[
+51,
+"",
+""
+],
+[
+47,
+"",
+""
+],
+[
+48,
+"",
+""
+],
+[
+59,
+"",
+""
+],
+[
+57,
+"",
+""
+],
+[
+55,
+"",
+""
+],
+[
+43,
+"",
+""
+],
+[
+33,
+"",
+""
+],
+[
+56,
+"",
+""
+],
+[
+50,
+"",
+""
+],
+[
+5,
+"",
+""
+]
+],
+"poolhouse": [
+[
+46,
+"",
+""
+],
+[
+10,
+"",
+""
+],
+[
+11,
+"",
+""
+],
+[
+9,
+"",
+""
+],
+[
+8,
+"",
+""
+]
+],
+"living": [
+[
+18,
+"",
+""
+],
+[
+19,
+"",
+""
+],
+[
+20,
+"",
+""
+],
+[
+61,
+"",
+""
+]
+],
+"village": [
+[
+44,
+"",
+""
+],
+[
+43,
+"",
+""
+],
+[
+40,
+"",
+""
+],
+[
+7,
+"",
+""
+],
+[
+59,
+"",
+""
+],
+[
+47,
+"",
+""
+],
+[
+48,
+"",
+""
+]
+]
+}

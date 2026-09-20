@@ -1,0 +1,21 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  included_files = ["netlify/lib/**", "src/data/bookings.json"]
+
+# the owner area is a private page: keep it out of search engines
+[[headers]]
+  for = "/proprietaire/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+[[headers]]
+  for = "/en/owner/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"

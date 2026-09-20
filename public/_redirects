@@ -1,0 +1,6 @@
+# the old French addresses, in case anyone kept one
+/fr  /  301
+/fr/*  /:splat  301
+# the house page was folded into the home page
+/la-maison/  /  301
+/en/the-house/  /en/  301

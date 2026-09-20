@@ -1,0 +1,106 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from './Nav.astro';
+import Footer from './Footer.astro';
+import Lightbox from './Lightbox.astro';
+import '../styles/pages.css';
+import { t as T, urls, type Lang } from '../i18n';
+import { ARROW } from '../icons';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = T(lang);
+const page = 'area';
+/* drive times from the house, rounded, so nobody plans a day on a figure that is out by ten minutes */
+const places = [
+  { fr: 'Le Pont du Gard', en: 'The Pont du Gard', min: '15', pfr: `L'aqueduc romain, et le Gardon en dessous pour se baigner l'été.`, pen: `The Roman aqueduct, with the Gardon river below it for a summer swim.` },
+  { fr: 'Uzès', en: 'Uzès', min: '25', pfr: `Le duché, la place aux Herbes, et le grand marché du samedi matin.`, pen: `The duchy, the place aux Herbes, and the big Saturday-morning market.` },
+  { fr: 'Nîmes', en: 'Nîmes', min: '25', pfr: `Les arènes, la Maison Carrée, les Halles, et les jardins de la Fontaine.`, pen: `The arena, the Maison Carrée, the covered market, and the Jardins de la Fontaine.` },
+  { fr: 'Avignon', en: 'Avignon', min: '35', pfr: `Le Palais des Papes, le pont, et le festival en juillet.`, pen: `The Palais des Papes, the bridge, and the festival in July.` },
+  { fr: 'Arles', en: 'Arles', min: '45', pfr: `Rome et Van Gogh dans la même ville, et les Rencontres de la photographie l'été.`, pen: `Rome and Van Gogh in one town, and the photography festival in summer.` },
+  { fr: 'La Camargue', en: 'The Camargue', min: '60', pfr: `Les flamants, les chevaux blancs, les Saintes-Maries-de-la-Mer.`, pen: `Flamingos, white horses, and Saintes-Maries-de-la-Mer.` },
+  { fr: 'La mer', en: 'The sea', min: '60', pfr: `Le Grau-du-Roi et l'Espiguette, la grande plage de sable au bout de la Camargue.`, pen: `Le Grau-du-Roi and the Espiguette, the long sand beach at the end of the Camargue.` },
+  { fr: 'Les Cévennes', en: 'The Cévennes', min: '60', pfr: `Les gorges, les rivières fraîches et les villages de montagne, dans l'autre direction.`, pen: `Gorges, cool rivers and mountain villages, in the other direction.` },
+];
+---
+<Base lang={lang} page={page} title={t('Les alentours · Les Calades', 'The area · Les Calades')} description={t('Lédenon, son château, et tout le Gard à moins d’une heure : Pont du Gard, Uzès, Nîmes, Avignon, la Camargue.', 'Lédenon, its château, and the whole Gard within an hour: Pont du Gard, Uzès, Nîmes, Avignon, the Camargue.')}>
+  <header class="masthead" id="top">
+    <Nav lang={lang} page={page} />
+  </header>
+
+<section class="village"><div class="wrap grid">
+  <div class="rv">
+    <h2>{t(`Lédenon`,`Lédenon`)}</h2>
+    <p class="strap">{t(`sous les ruines d'un château du XIIe siècle`,`under the ruins of a 12th-century château`)}</p>
+    <p class="body">{t(`Le village grimpe sur sa colline en ruelles pavées, les calades, jusqu'aux ruines du château qui dominent les toits. Autour, la plaine du Rhône, des vignes, des oliviers, et par temps clair le mont Ventoux à l'horizon.`,`The village climbs its hill in stone-paved lanes, the calades, up to the château ruin that stands over the roofs. All around, the Rhône plain, vines, olive trees, and on a clear day Mont Ventoux on the horizon.`)}</p>
+    <p class="body">{t(`Pour le pain et le quotidien, le Vival au cœur du village ; les grands supermarchés de Remoulins et Marguerittes sont à dix minutes. Le soir, Lédenon Pizza vaut vraiment le détour.`,`For bread and day-to-day shopping, the Vival in the heart of the village; the big supermarkets in Remoulins and Marguerittes are ten minutes away. In the evening, Lédenon Pizza is particularly good.`)}</p>
+    <p style="margin-top:1.6rem"><a class="pill outline" href="#top" data-gallery="village"><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Voir le village`,`See the village`)}</span></a></p>
+  </div>
+  <div class="duo rv" style="--i:1" data-gallery="village">
+    <div class="photo"><img src="/img/43.jpg" alt={t('Une calade, ruelle pavée de pierre, entre les maisons du village', 'A calade, a stone-paved lane between the village houses')} /></div>
+    <div class="photo"><img src="/img/44.jpg" alt={t('Les toits de Lédenon et la plaine au-delà', 'The roofs of Lédenon and the plain beyond')} /></div>
+  </div>
+</div></section>
+
+<section class="dark" id="around">
+  <img src="/img/40.jpg" alt="" aria-hidden="true">
+  <div class="wrap">
+    <div class="rv">
+      <h2>{t(`À moins d'une heure`,`Within the hour`)}</h2>
+      <p class="strap">{t(`en voiture depuis la maison, en gros`,`by car from the house, give or take`)}</p>
+    </div>
+    <div class="places">
+      {places.map((p, i) => (
+        <div class="place rv" style={`--i:${(i % 4) + 1}`}><b>{p.min} min</b><h3>{t(p.fr, p.en)}</h3><p>{t(p.pfr, p.pen)}</p></div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="daily"><div class="wrap grid">
+  <div class="rv">
+    <h2>{t(`Au jour le jour`,`Day to day`)}</h2>
+    <p class="strap">{t(`marchés, vin, baignades`,`markets, wine, swimming`)}</p>
+    <ul class="feat">
+      <li><h3>{t(`Les marchés`,`The markets`)}</h3><p>{t(`Uzès le samedi matin, le plus beau de la région ; les Halles de Nîmes tous les jours ; et les petits marchés des villages autour, selon le jour.`,`Uzès on Saturday morning, the finest in the region; the covered market in Nîmes every day; and the small village markets around, depending on the day.`)}</p></li>
+      <li><h3>{t(`Le vin`,`The wine`)}</h3><p>{t(`Les Côtes du Rhône sont à la porte : Tavel et Lirac à vingt minutes, Châteauneuf-du-Pape un peu plus loin, et des caves de village partout.`,`The Côtes du Rhône start at the door: Tavel and Lirac twenty minutes away, Châteauneuf-du-Pape a little further, and village cellars everywhere.`)}</p></li>
+      <li><h3>{t(`Se baigner`,`Swimming`)}</h3><p>{t(`La piscine, d'abord. Puis le Gardon au pied du Pont du Gard, les gorges plus haut, et la mer à une heure.`,`The pool, first. Then the Gardon at the foot of the Pont du Gard, the gorges further up, and the sea an hour away.`)}</p></li>
+      <li><h3>{t(`Manger`,`Eating`)}</h3><p>{t(`Des restaurants dans les villages autour et à Uzès ; on vous donne nos adresses à l'arrivée, elles changent avec les saisons.`,`Restaurants in the villages around and in Uzès; we give you our addresses when you arrive, they change with the seasons.`)}</p></li>
+    </ul>
+  </div>
+  <figure class="rv" style="--i:2">
+    <div class="photo"><img src="/img/7.jpg" alt={t('La vue depuis la maison sur les toits du village et la plaine', 'The view from the house over the village roofs and the plain')} loading="lazy" /></div>
+    <figcaption>{t(`la vue depuis la maison`,`the view from the house`)}</figcaption>
+  </figure>
+</div></section>
+
+<section class="getting"><div class="wrap">
+  <div class="rv">
+    <h2>{t(`Venir`,`Getting here`)}</h2>
+    <p class="strap">{t(`une voiture est nécessaire`,`you will need a car`)}</p>
+  </div>
+  <div class="list">
+    <div class="rv" style="--i:1"><h3>{t(`En voiture`,`By car`)}</h3><p>{t(`Autoroute A9, sortie Remoulins, puis dix minutes de petite route. Le parking fermé prend trois voitures, et une quatrième se gare dehors. Le dernier kilomètre est expliqué ci-dessous.`,`The A9 motorway, Remoulins exit, then ten minutes of country road. The gated car park takes three cars, and a fourth parks outside. The last kilometre is explained below.`)}</p></div>
+    <div class="rv" style="--i:2"><h3>{t(`En train`,`By train`)}</h3><p>{t(`La gare TGV de Nîmes Pont-du-Gard est à un quart d'heure, celle d'Avignon TGV à trente-cinq minutes. Paris est à trois heures de l'une comme de l'autre. Louez une voiture à la gare.`,`Nîmes Pont-du-Gard TGV station is a quarter of an hour away, Avignon TGV thirty-five minutes. Paris is three hours from either. Hire a car at the station.`)}</p></div>
+    <div class="rv" style="--i:3"><h3>{t(`En avion`,`By plane`)}</h3><p>{t(`Nîmes à trente minutes, Montpellier à une heure, Marseille à une heure et quart. Toutes ont des loueurs sur place.`,`Nîmes thirty minutes away, Montpellier an hour, Marseille an hour and a quarter. All have car hire on site.`)}</p></div>
+  </div>
+  <div class="approach" id="acces">
+    <div class="txt rv">
+      <h3>{t(`Le dernier kilomètre`,`The last kilometre`)}</h3>
+      <p class="warn">{t(`Ne suivez pas le GPS dans le village : il vous envoie dans des ruelles trop étroites.`,`Do not follow the GPS through the village: it sends you down lanes that are too narrow.`)}</p>
+      <p>{t(`Suivez les flèches du plan, et garez-vous dans le parking privé. Laure vous y attend.`,`Follow the arrows on the map, and park in the private car park. Laure meets you there.`)}</p>
+      <ol>
+        <li>{t(`La rue du Parlement, jusqu'au bout.`,`Rue du Parlement, all the way to the end.`)}</li>
+        <li>{t(`Puis l'accès aux remparts.`,`Then the access to the ramparts.`)}</li>
+        <li>{t(`Tournez à droite à la borne à incendie.`,`Turn right at the fire hydrant.`)}</li>
+        <li>{t(`Restez à droite dans le petit rétrécissement, jusqu'au parking.`,`Keep right through the short narrow stretch, as far as the car park.`)}</li>
+      </ol>
+    </div>
+    <figure class="rv" style="--i:1"><div class="photo map"><img src="/img/acces-plan.jpg" alt={t('Plan du village avec le trajet fléché jusqu\'au parking', 'Map of the village with the route to the car park marked by arrows')} loading="lazy" /></div><figcaption>{t(`le trajet, en rouge`,`the route, in red`)}</figcaption></figure>
+    <figure class="rv" style="--i:2"><div class="photo"><img src="/img/acces-parking.jpg" alt={t('Le parking pavé des Calades, avec le portail en bois et les cyprès', 'The paved car park at Les Calades, with the wooden gate and the cypresses')} loading="lazy" /></div><figcaption>{t(`le parking, où Laure vous attend`,`the car park, where Laure meets you`)}</figcaption></figure>
+  </div>
+  <p class="center" style="margin-top:2.8rem"><a class="pill primary" href={urls.book[lang]}><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Voir les dates`,`Check dates`)}</span></a></p>
+</div></section>
+
+  <Footer lang={lang} page={page} />
+  <Lightbox />
+</Base>

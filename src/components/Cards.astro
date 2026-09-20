@@ -1,0 +1,57 @@
+---
+import { t as T, urls, type Lang, type Page } from '../i18n';
+import { ARROW, PLUS, PLUS_ICON, STAR } from '../icons';
+import LangSwitch from './LangSwitch.astro';
+interface Props { lang: Lang; page: Page }
+const { lang, page } = Astro.props;
+const t = T(lang);
+const home = page === 'home' ? '' : urls.home[lang]; // anchors stay on the home page, other pages link back to it
+---
+<section class="made" id="house"><div class="wrap">
+  <div class="center rv">
+    <h2>{t(`Faite pour les longs séjours`,`Made for long stays`)}</h2>
+    <p class="strap">{t(`dix personnes, quatre chambres, et la piscine à vous`,`ten of you, four bedrooms, and the pool to yourselves`)}</p>
+    <p class="lede">{t(`Une maison de village en pierre, des terrasses privées, et tout ce qu'il faut pour se sentir chez soi.`,`A stone village house, private terraces, and everything you need to feel at home.`)}</p>
+  </div>
+  <div class="cards-nav"><button class="arr" type="button" id="cardsPrev" aria-label="Previous rooms"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button><button class="arr" type="button" id="cardsNext" aria-label="Next rooms"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button></div>
+  <div class="cards"><div class="track">
+    <a class="card rv" style="--i:1" href="#gallery" data-gallery="pool"><img src="/img/2.jpg" alt="The pool lengthways between stone walls and a cypress" loading="lazy"><div class="t"><h3>{t(`La piscine`,`The pool`)}</h3><p>{t(`Derrière ses propres murs, au soleil toute la journée, avec le château au-dessus.`,`Behind its own walls, in the sun all day, with the château above.`)}</p></div></a>
+    <a class="card rv" style="--i:2" href="#gallery" data-gallery="kitchen"><img src="/img/28.jpg" alt="Farmhouse kitchen with an oak dresser and round table" loading="lazy"><div class="t"><h3>{t(`La cuisine`,`The kitchen`)}</h3><p>{t(`Une cuisine de ferme avec son vaisselier et une table ronde au milieu.`,`A farmhouse kitchen with an oak dresser and a round table in the middle.`)}</p></div></a>
+    <a class="card rv" style="--i:3" href="#gallery" data-gallery="terraces"><img src="/img/31.jpg" alt="Terrace under a vine canopy with the village roofs beyond" loading="lazy"><div class="t"><h3>{t(`Les terrasses`,`The terraces`)}</h3><p>{t(`Sous la treille, dans la cour, ou face à la plaine jusqu'au Ventoux.`,`Under the vine, in the courtyard, or facing the plain all the way to Mont Ventoux.`)}</p></div></a>
+    <a class="card rv" style="--i:4" href="#gallery" data-gallery="sitting"><img src="/img/18.jpg" alt="Sitting room with deep sofas and a fireplace" loading="lazy"><div class="t"><h3>{t(`Le salon`,`The sitting room`)}</h3><p>{t(`Des canapés profonds, des livres, et des murs épais qui gardent la fraîcheur.`,`Deep sofas, books, and thick walls that keep it cool.`)}</p></div></a>
+    <a class="card rv" style="--i:4" href="#gallery" data-gallery="master"><img src="/img/34.jpg" alt="The master bedroom, with big log beams and doors onto a balcony" loading="lazy"><div class="t"><h3>{t(`La chambre principale`,`The master bedroom`)}</h3><p>{t(`Un lit king sous de grosses poutres, avec des portes sur son propre balcon.`,`A king bed under big log beams, with doors onto its own balcony.`)}</p></div></a>
+    <a class="card rv" style="--i:4" href="#gallery" data-gallery="fourposter"><img src="/img/24.jpg" alt="Bedroom with a four-poster bed under wooden beams" loading="lazy"><div class="t"><h3>{t(`Le baldaquin`,`The four-poster`)}</h3><p>{t(`Un lit à baldaquin sous les poutres, avec une armoire en pin.`,`A four-poster under the beams, with a pine wardrobe.`)}</p></div></a>
+    <a class="card rv" style="--i:4" href="#gallery" data-gallery="fireplace"><img src="/img/16.jpg" alt="The salle de séjour, with a queen bed, a single bed and red quilts" loading="lazy"><div class="t"><h3>{t(`La salle de séjour`,`The salle de séjour`)}</h3><p>{t(`Un lit queen, un lit simple à côté, et une vieille cheminée pour le bureau.`,`A queen bed, a single beside it, and an old fireplace for the desk.`)}</p></div></a>
+    <a class="card rv" style="--i:4" href="#gallery" data-gallery="phbed"><img src="/img/46.jpg" alt="The pool house bedroom, with red gingham curtains and an iron rail" loading="lazy"><div class="t"><h3>{t(`La chambre du pool house`,`The pool house bedroom`)}</h3><p>{t(`Du vichy rouge aux fenêtres, un lit simple en plus, au-dessus de sa propre cuisine.`,`Red gingham at the windows, a single bed as well, above its own kitchen.`)}</p></div></a>
+    <a class="card rv" style="--i:4" href="#gallery" data-gallery="phkitchen"><img src="/img/9.jpg" alt="The pool house kitchen, white, with the garden through the open door" loading="lazy"><div class="t"><h3>{t(`La cuisine du pool house`,`The pool house kitchen`)}</h3><p>{t(`Une seconde cuisine avec sa porte sur le jardin, pour les déjeuners au bord de la piscine.`,`A second kitchen with its own door to the garden, for lunches by the pool.`)}</p></div></a>
+  </div></div>
+  <script is:inline>
+  (function(){
+    /* three cards in view; the arrows go round in both directions, from the very first press */
+    var row=document.querySelector('.made .cards'); if(!row) return;
+    var track=row.querySelector('.track'), prev=document.getElementById('cardsPrev'), next=document.getElementById('cardsNext'), busy=false;
+    var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function step(){ var c=track.firstElementChild; return c.getBoundingClientRect().width+(parseFloat(getComputedStyle(track).columnGap||getComputedStyle(track).gap)||0); }
+    function settle(fn){ track.style.transition='none'; fn(); void track.offsetWidth; track.style.transition=''; }
+    function go(dir){
+      if(busy) return; busy=true;
+      if(reduce){ if(dir>0) track.appendChild(track.firstElementChild); else track.insertBefore(track.lastElementChild,track.firstElementChild); busy=false; return; }
+      if(dir>0){ /* slide one card left, then move that card to the end and snap back */
+        track.style.transform='translateX(-'+step()+'px)';
+        track.addEventListener('transitionend',function h(){ track.removeEventListener('transitionend',h); settle(function(){ track.appendChild(track.firstElementChild); track.style.transform='none'; }); busy=false; },{once:true});
+      } else { /* bring the last card round to the front, then slide it into view */
+        settle(function(){ track.insertBefore(track.lastElementChild,track.firstElementChild); track.style.transform='translateX(-'+step()+'px)'; });
+        requestAnimationFrame(function(){ track.style.transform='none'; });
+        track.addEventListener('transitionend',function h(){ track.removeEventListener('transitionend',h); busy=false; },{once:true});
+      }
+      setTimeout(function(){ busy=false; },900); /* in case a transition never fires */
+    }
+    prev.addEventListener('click',function(){ go(-1); }); next.addEventListener('click',function(){ go(1); });
+    /* a swipe on touch does the same as the arrows */
+    var sx=null; row.addEventListener('touchstart',function(e){ sx=e.touches[0].clientX; },{passive:true});
+    row.addEventListener('touchend',function(e){ if(sx===null) return; var d=e.changedTouches[0].clientX-sx; sx=null; if(Math.abs(d)>40) go(d<0?1:-1); });
+    document.querySelectorAll('.made .card').forEach(function(c){ c.addEventListener('click',function(e){ e.preventDefault(); if(window.__openGallery) window.__openGallery(c.getAttribute('data-gallery'),0); }); });
+  })();
+  </script>
+</div></section>
+

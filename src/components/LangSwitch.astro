@@ -1,0 +1,6 @@
+---
+import { urls, type Lang, type Page } from '../i18n';
+interface Props { lang: Lang; page: Page }
+const { lang, page } = Astro.props;
+---
+<span class="lang" role="group" aria-label="Langue / Language"><a href={urls[page].fr} hreflang="fr" lang="fr" aria-current={lang === 'fr' ? 'true' : undefined}>FR</a><i>/</i><a href={urls[page].en} hreflang="en" lang="en" aria-current={lang === 'en' ? 'true' : undefined}>EN</a></span>

@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from './Nav.astro';
+import Faq from './Faq.astro';
+import Footer from './Footer.astro';
+import '../styles/pages.css';
+import { t as T, urls, AIRBNB, AIRBNB_MESSAGE, PHONE, PHONE_SHOWN, WHATSAPP, type Lang } from '../i18n';
+import { ARROW } from '../icons';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = T(lang);
+const page = 'practical';
+const VIVAL = 'https://vival.casino.fr/stores/E6323/ledenon-1-rue-letino';
+const PIZZA = 'https://www.google.com/maps/search/?api=1&query=L%C3%A9denon+Pizza%2C+7+chemin+de+l%27Amandier%2C+30210+L%C3%A9denon';
+---
+<Base lang={lang} page={page} title={t('Infos pratiques · Les Calades', 'Practical information · Les Calades')} description={t('Arrivée, départ, parking, la piscine, les courses, et comment nous joindre.', 'Check-in, check-out, parking, the pool, shopping, and how to reach us.')}>
+  <header class="masthead" id="top">
+    <Nav lang={lang} page={page} />
+  </header>
+<section class="bk-head"><div class="wrap">
+  <div class="row">
+    <div class="rv">
+      <h2>{t(`Infos pratiques`,`Practical information`)}</h2>
+      <p class="strap">{t(`avant de venir, et pendant le séjour`,`before you come, and while you are here`)}</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="daily tiles-sec" id="info"><div class="wrap">
+  <div class="tiles">
+    <div class="tile rv"><h3>{t(`Arrivée et départ`,`Check-in and check-out`)}</h3>
+      <p>{t(`Arrivée à partir de 17 h. Laure vous attend à la maison avec les clés, vous fait visiter et répond à vos questions.`,`Check-in from 5 pm. Laure meets you at the house with the keys, shows you round and answers your questions.`)}</p>
+      <p>{t(`Départ avant 11 h, pour laisser le temps de préparer la maison pour les suivants.`,`Check-out by 11 am, to leave time to get the house ready for the next guests.`)}</p>
+      <p class="script">{t(`2 rue du Réservoir, 30210 Lédenon`,`2 rue du Réservoir, 30210 Lédenon`)}</p></div>
+    <div class="tile rv" style="--i:1"><h3>{t(`Le parking`,`Parking`)}</h3>
+      <p>{t(`Un parking privé fermé pour trois voitures, et une place privée dehors pour une quatrième. Les ruelles du village sont étroites : ne suivez pas le GPS, suivez notre plan.`,`A private, gated car park for three cars, and a private space outside for a fourth. The village lanes are narrow: do not follow the GPS, follow our map.`)}</p>
+      <p><a href={urls.area[lang] + '#acces'}>{t(`Le plan d'accès`,`The approach, with a map`)}</a></p></div>
+    <div class="tile rv" style="--i:2"><h3>{t(`La piscine`,`The pool`)}</h3>
+      <p>{t(`Privée, rien qu'à vous, mais pas surveillée. À l'arrivée, un adulte signe une décharge de responsabilité. Les enfants restent sous la garde des adultes du groupe.`,`Private and yours alone, but not lifeguarded. At check-in one adult signs a liability waiver. Children stay in the care of the adults in the party.`)}</p></div>
+    <div class="tile rv"><h3>{t(`La maison`,`The house`)}</h3>
+      <ul>
+        <li>{t(`Beaucoup d'escaliers, dedans et dehors : pas pour une personne à mobilité réduite.`,`Lots of stairs, inside and out: not for anyone with reduced mobility.`)}</li>
+        <li>{t(`Climatisation dans les chambres, wifi rapide partout.`,`Air conditioning in the bedrooms, fast wifi throughout.`)}</li>
+        <li>{t(`Trois caméras à l'extérieur seulement : parking, mur du Mazet, passage sous le porche.`,`Three cameras outside only: car park, Mazet wall, passage under the porch.`)}</li>
+        <li>{t(`Deux cuisines, un barbecue dans la cour du pool house.`,`Two kitchens, and a barbecue in the pool house courtyard.`)}</li>
+      </ul></div>
+    <div class="tile rv" style="--i:1"><h3>{t(`Les courses`,`Shopping`)}</h3>
+      <p>{t(`Le `,`The `)}<a href={VIVAL} rel="noopener">{t(`Vival`,`Vival`)}</a>{t(`, au cœur du village (1 rue Letino), pour le pain et le quotidien. Les grands supermarchés sont à Remoulins et à Marguerittes, à dix minutes. Le marché d'Uzès le samedi matin vaut le détour, les Halles de Nîmes tous les jours.`,`, in the heart of the village (1 rue Letino), for bread and everyday shopping. The big supermarkets are in Remoulins and Marguerittes, ten minutes away. The Uzès market on Saturday morning is worth the trip, and the covered market in Nîmes is open every day.`)}</p>
+      <p>{t(`Le soir, `,`In the evening, `)}<a href={PIZZA} rel="noopener">Lédenon Pizza</a>{t(` (7 chemin de l'Amandier, du jeudi au dimanche) est particulièrement bonne.`,` (7 chemin de l'Amandier, Thursday to Sunday) is particularly good.`)}</p>
+      <p><a href={urls.area[lang]}>{t(`Plus sur les alentours`,`More about the area`)}</a></p></div>
+    <div class="tile rv" style="--i:2"><h3>{t(`Avant de partir`,`Before you leave`)}</h3>
+      <ul>
+        <li>{t(`Les poubelles sorties, les bouteilles au verre.`,`Bins out, bottles to the glass bank.`)}</li>
+        <li>{t(`Les draps à terre au pied des lits.`,`Sheets on the floor at the foot of the beds.`)}</li>
+        <li>{t(`La vaisselle faite, le barbecue et le four propres.`,`Dishes done, barbecue and oven clean.`)}</li>
+        <li>{t(`Les lumières et la climatisation éteintes, les volets fermés.`,`Lights and air conditioning off, shutters closed.`)}</li>
+      </ul></div>
+    <div class="tile rv"><h3>{t(`Réserver`,`Booking`)}</h3>
+      <p>{t(`Les séjours se réservent et se paient sur Airbnb : le prix exact, la caution, la protection et les conditions d'annulation sont les leurs. Choisissez vos dates ici d'abord, le calendrier vous dit ce qui est libre.`,`Stays are booked and paid on Airbnb: the exact price, deposit, cover and cancellation terms are theirs. Pick your dates here first, the calendar tells you what is free.`)}</p>
+      <p><a href={urls.book[lang]}>{t(`Voir les dates`,`Check dates`)}</a></p></div>
+    <div class="tile rv" style="--i:1"><h3>{t(`Séjour minimum`,`Minimum stay`)}</h3>
+      <p>{t(`Une semaine, parfois plus en hiver. Nous préférons les longs séjours : un mois entier, c'est moitié prix par nuit, comme sur Airbnb.`,`A week, sometimes more in winter. We prefer long stays: a full month is half price per night, as on Airbnb.`)}</p></div>
+    <div class="tile rv" style="--i:2"><h3>{t(`Taxe de séjour et enregistrement`,`Tourist tax and registration`)}</h3>
+      <p>{t(`La taxe de séjour est collectée par Airbnb avec la réservation. La maison est un meublé de tourisme déclaré ; son numéro d'enregistrement figurera ici.`,`Tourist tax is collected by Airbnb with the booking. The house is a registered meublé de tourisme; its registration number will appear here.`)}</p></div>
+  </div>
+</div></section>
+
+<section class="contact" id="contact"><div class="wrap grid">
+  <div class="rv">
+    <h2>{t(`Une question ?`,`A question?`)}</h2>
+    <p class="strap">{t(`Laure répond vite, en français comme en anglais`,`Laure answers quickly, in French or in English`)}</p>
+    <p class="body">{t(`Avant de réserver ou pendant le séjour, le plus simple est un message. Par téléphone, c'est le même numéro.`,`Before you book or during your stay, a message is the easiest. By phone, it is the same number.`)}</p>
+    <div class="actions">
+      <a class="pill outline" href={WHATSAPP} rel="noopener"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.8A8 8 0 1 1 8.2 19z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 1a4 4 0 0 1-2-2l1-1-1-2z"/></svg></span><span>{t(`WhatsApp Laure`,`WhatsApp Laure`)}</span></a>
+      <a class="pill outline" href={`sms:${PHONE}`}><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg></span><span>{t(`Envoyer un SMS`,`Send a text`)}</span></a>
+      <a class="pill outline" href={AIRBNB_MESSAGE} rel="noopener"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c-3 4-7 7.5-7 12a7 7 0 0 0 14 0c0-4.5-4-8-7-12z"/><circle cx="12" cy="15" r="2.5"/></svg></span><span>{t(`Écrire sur Airbnb`,`Message on Airbnb`)}</span></a>
+    </div>
+    <p class="body" style="margin-top:1.4rem"><a href={`tel:${PHONE}`}>{PHONE_SHOWN}</a> · <a href={AIRBNB} rel="noopener">{t(`notre annonce Airbnb`,`our Airbnb listing`)}</a></p>
+  </div>
+  <figure class="rv" style="--i:2">
+    <div class="photo"><img src="/img/50.jpg" alt={t('La maison vue de la cour, avec la table sous le parasol', 'The house from the courtyard, with the table under the parasol')} loading="lazy" /></div>
+  </figure>
+</div></section>
+
+  <Faq lang={lang} page={page} />
+  <Footer lang={lang} page={page} />
+</Base>
