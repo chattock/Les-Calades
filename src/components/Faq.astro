@@ -1,0 +1,27 @@
+---
+import { t as T, urls, type Lang, type Page } from '../i18n';
+import { ARROW, PLUS, PLUS_ICON, STAR } from '../icons';
+import LangSwitch from './LangSwitch.astro';
+interface Props { lang: Lang; page: Page }
+const { lang, page } = Astro.props;
+const t = T(lang);
+const home = page === 'home' ? '' : urls.home[lang]; // anchors stay on the home page, other pages link back to it
+---
+<section class="faq" id="faq"><div class="wrap">
+  <div class="center rv">
+    <h2>{t(`Questions pratiques`,`Common questions`)}</h2>
+    <p class="strap">{t(`les choses à savoir avant de réserver`,`the things to know before you book`)}</p>
+  </div>
+  <div class="panel rv" style="--i:1">
+    <img src="/img/18.jpg" alt="" aria-hidden="true">
+    <div class="qa">
+      <details><summary><span>{t(`Combien coûte une nuit ?`,`How much is a night?`)}</span><Fragment set:html={PLUS_ICON} /></summary><p>{t(`Le prix change selon la saison et la durée du séjour, alors nous ne l'affichons pas ici. Choisissez vos dates dans notre système de réservation et il vous donne le prix exact, jamais plus cher qu'en passant par Airbnb.`,`The price changes with the season and the length of stay, so we don't print it here. Pick your dates in our booking system and it gives you the exact price, never more than through Airbnb.`)}</p></details>
+      <details><summary><span>{t(`Y a-t-il un séjour minimum ?`,`Is there a minimum stay?`)}</span><Fragment set:html={PLUS_ICON} /></summary><p>{t(`Une semaine. Nous préférons les séjours plus longs : un mois entier, c'est moitié prix par nuit, comme sur Airbnb. Le calendrier ne propose que les dates possibles.`,`A week. We prefer longer stays: a full month is half price per night, as on Airbnb. The calendar only offers the dates that work.`)}</p></details>
+      <details><summary><span>{t(`À quelle heure arrive-t-on et part-on ?`,`What time is check-in and check-out?`)}</span><Fragment set:html={PLUS_ICON} /></summary><p>{t(`Arrivée à partir de 17 h, départ avant 11 h. L'un de nous vous attend avec les clés et vous fait visiter.`,`Check-in from 5 pm, check-out by 11 am. One of us meets you with the keys and shows you round.`)}</p></details>
+      <details><summary><span>{t(`La maison convient-elle à une personne à mobilité réduite ?`,`Is the house suitable for someone with reduced mobility?`)}</span><Fragment set:html={PLUS_ICON} /></summary><p>{t(`Non. Il y a beaucoup d'escaliers partout, à l'intérieur comme à l'extérieur.`,`No. There are a lot of stairs throughout, inside and out.`)}</p></details>
+      <details><summary><span>{t(`Peut-on utiliser la piscine librement ?`,`Can we use the pool freely?`)}</span><Fragment set:html={PLUS_ICON} /></summary><p>{t(`Oui, après avoir signé la décharge de responsabilité à l'arrivée. Les enfants restent sous la surveillance des adultes.`,`Yes, after signing the liability waiver at check-in. Children are supervised by the adults in the party.`)}</p></details>
+      <details><summary><span>{t(`Y a-t-il un parking et des caméras ?`,`Is there parking, and are there cameras?`)}</span><Fragment set:html={PLUS_ICON} /></summary><p>{t(`Un parking privé fermé pour trois voitures et une place dehors. Trois caméras à l'extérieur uniquement : le parking, le mur du Mazet et le passage sous le porche.`,`A private, gated car park for three cars and one space outside. Three cameras, outside only: the car park, the Mazet wall and the passage under the porch.`)}</p></details>
+    </div>
+  </div>
+</div></section>
+

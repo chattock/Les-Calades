@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from './Nav.astro';
+import Calendar from './Calendar.astro';
+import Footer from './Footer.astro';
+import '../styles/book.css';
+import { t as T, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = T(lang);
+const page = 'book';
+---
+<Base lang={lang} page={page} title={t('Réserver · Les Calades', 'Book · Les Calades')} description={t('Choisissez vos dates aux Calades : le prix exact pour votre séjour, sans frais de plateforme.', 'Pick your dates at Les Calades: the exact price for your stay, with no platform fee.')}>
+  <header class="masthead" id="top">
+    <Nav lang={lang} page={page} />
+  </header>
+<section class="bk-head"><div class="wrap">
+  <div class="row">
+    <div class="rv">
+      <h2>{t(`Réserver en direct`,`Book direct`)}</h2>
+      <p class="strap">{t(`une semaine au moins, et moitié prix pour un mois`,`a week at least, and half price for a month`)}</p>
+      <p class="lede">{t(`Choisissez vos dates : le prix exact s'affiche pour votre séjour, sans frais de plateforme. Laure confirme sous un jour, puis vous payez en ligne.`,`Pick your dates: the exact price appears for your stay, with no platform fee. Laure confirms within a day, then you pay online.`)}</p>
+    </div>
+  </div>
+</div></section>
+
+  <Calendar lang={lang} page={page} />
+<section class="dark how" id="how">
+  <img src="/img/7.jpg" alt="" aria-hidden="true">
+  <div class="wrap">
+    <div class="rv">
+      <h2>{t(`Comment ça marche`,`How it works`)}</h2>
+      <p class="strap">{t(`trois étapes, pas de plateforme entre nous`,`three steps, no platform in between`)}</p>
+    </div>
+    <div class="steps">
+      <div class="st rv" style="--i:1"><b>1</b><h3>{t(`Choisissez vos dates`,`Pick your dates`)}</h3><p>{t(`Le calendrier ne montre que les dates libres : les réservations Airbnb et directes sont déjà retirées. Le prix s'affiche pour votre séjour.`,`The calendar only shows free dates: Airbnb and direct bookings are already taken out. The price appears for your stay.`)}</p></div>
+      <div class="st rv" style="--i:2"><b>2</b><h3>{t(`Laure confirme`,`Laure confirms`)}</h3><p>{t(`Vous envoyez une demande, sans paiement. Laure répond sous un jour, par e-mail ou WhatsApp.`,`You send a request, no payment. Laure answers within a day, by e-mail or WhatsApp.`)}</p></div>
+      <div class="st rv" style="--i:3"><b>3</b><h3>{t(`Payez en ligne`,`Pay online`)}</h3><p>{t(`Un lien de paiement sécurisé (carte) pour le séjour, et une caution simplement bloquée, jamais débitée sans raison. Les dates sont alors fermées sur Airbnb.`,`A secure card payment link for the stay, and a damage deposit that is only held, never charged without cause. The dates are then closed on Airbnb.`)}</p></div>
+    </div>
+  </div>
+</section>
+
+  <Footer lang={lang} page={page} />
+</Base>

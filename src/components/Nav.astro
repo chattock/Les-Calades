@@ -1,0 +1,46 @@
+---
+import { t as T, urls, type Lang, type Page } from '../i18n';
+import { ARROW, PLUS, PLUS_ICON, STAR } from '../icons';
+import LangSwitch from './LangSwitch.astro';
+interface Props { lang: Lang; page: Page }
+const { lang, page } = Astro.props;
+const t = T(lang);
+const home = page === 'home' ? '' : urls.home[lang]; // anchors stay on the home page, other pages link back to it
+---
+  <nav class="nav mast">
+    <a class="brand logo" href={urls.home[lang]} aria-label="Les Calades"><span class="g" aria-hidden="true"><b>L</b><b>E</b><b>S</b><svg class="stair" aria-hidden="true" focusable="false"><path vector-effect="non-scaling-stroke" d="M0 0"/></svg><b>C</b><b>A</b><b>L</b><b>A</b><b>D</b><b>E</b><b>S</b></span></a>
+    <div class="right">
+      <LangSwitch lang={lang} page={page} />
+      <button class="menu" type="button" aria-expanded="false" aria-controls="menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menu</button>
+    </div>
+    <ul id="menu">
+      <li><a href={home + '#house'}>{t(`La maison`,`The house`)}</a></li>
+      <li><a href={home + '#reviews'}>{t(`Les avis`,`Reviews`)}</a></li>
+      <li><a href={home + '#hosts'}>{t(`Votre hôte`,`Your host`)}</a></li>
+      <li><a href={home + '#faq'}>{t(`Questions`,`Questions`)}</a></li>
+      <li><a href={urls.book[lang]} aria-current={page === 'book' ? 'page' : undefined}>{t(`Réserver`,`Book`)}</a></li>
+      <li><LangSwitch lang={lang} page={page} /></li>
+    </ul>
+  </nav>
+<script is:inline>
+(function(){
+  var g=document.querySelector('.mast .brand .g'); if(!g) return;
+  var svg=g.querySelector('.stair'), path=svg.querySelector('path');
+  var cells=Array.prototype.slice.call(g.querySelectorAll('b')).slice(6,10); // A D E S
+  var dx=[0.1,-0.1,-0.5];
+  function draw(){
+    var gr=g.getBoundingClientRect(), fs=parseFloat(getComputedStyle(g).fontSize), t=1.6;
+    var r=cells.map(function(b){var q=b.getBoundingClientRect();return {l:q.left-gr.left,r:q.right-gr.left,top:q.top-gr.top};});
+    var top=cells[0].getBoundingClientRect().top-gr.top; // row 2 top; row 1 top is 0
+    var y0=0.275*fs+t/2, step=(0.925*fs)/3;
+    var x0=r[0].l, xEnd=(r[2].r+r[3].l)/2+dx[2], w=(xEnd-x0)/3;
+    var ext=0.38*step; // the lower treads run on a little to the left past their riser, like a nosing
+    var d='M'+x0.toFixed(2)+' '+y0.toFixed(2)+'H'+(x0+w).toFixed(2)+'V'+(y0+step).toFixed(2);
+    for(var k=1;k<3;k++){ var xs=x0+k*w, xe=(k==2)?xEnd:x0+(k+1)*w; d+='M'+(xs-ext).toFixed(2)+' '+(y0+k*step).toFixed(2)+'H'+xe.toFixed(2)+'V'+(y0+(k+1)*step).toFixed(2); }
+    d+='M'+(xEnd-ext).toFixed(2)+' '+(y0+3*step).toFixed(2)+'H'+r[3].r.toFixed(2); // a fourth tread at the foot of the last riser, same overhang to the left, ending where the S ends
+    svg.setAttribute('viewBox','0 0 '+gr.width+' '+gr.height); path.setAttribute('d',d);
+  }
+  draw(); window.addEventListener('resize',draw);
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(draw);} setTimeout(draw,600);
+})();
+</script>

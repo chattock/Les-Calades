@@ -1,0 +1,47 @@
+---
+import '@fontsource/poppins/300.css';
+import '@fontsource/poppins/300-italic.css';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/800.css';
+import '@fontsource/la-belle-aurore';
+import '../styles/global.css';
+import { urls, type Lang, type Page } from '../i18n';
+interface Props { lang: Lang; page: Page; title: string; description: string }
+const { lang, page, title, description } = Astro.props;
+---
+<!doctype html>
+<html lang={lang} data-lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="alternate" hreflang="fr" href={urls[page].fr} />
+    <link rel="alternate" hreflang="en" href={urls[page].en} />
+    <link rel="alternate" hreflang="x-default" href={urls[page].fr} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/img/1.jpg" />
+    <meta name="theme-color" content="#2F4A1E" />
+  </head>
+  <body>
+    <div class="site">
+      <slot />
+    </div>
+    <script is:inline>
+    (function(){
+      document.documentElement.classList.add('js');
+      var els=document.querySelectorAll('.rv');
+      if('IntersectionObserver' in window){
+        var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.08});
+        els.forEach(function(el){io.observe(el);});
+      } else { els.forEach(function(el){el.classList.add('in');}); }
+      var nav=document.querySelector('.nav'), btn=document.querySelector('.nav .menu');
+      if(btn){ btn.addEventListener('click',function(){ var o=nav.classList.toggle('open'); btn.setAttribute('aria-expanded',String(o)); }); }
+    })();
+    </script>
+  </body>
+</html>

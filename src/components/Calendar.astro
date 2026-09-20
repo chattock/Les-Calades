@@ -1,0 +1,148 @@
+---
+import { t as T, urls, type Lang, type Page } from '../i18n';
+import { ARROW } from '../icons';
+import prices from '../data/pricelabs.json';
+import bookings from '../data/bookings.json';
+interface Props { lang: Lang; page: Page; owner?: boolean }
+const { lang, page, owner = false } = Astro.props;
+const t = T(lang);
+---
+<section class="bk" id="book"><div class="wrap grid">
+  <div class="rv">
+    <div class="cal-head">
+      <h3 class="sub" style="font-size:.85rem;letter-spacing:.16em">{t(`Disponibilités`,`Availability`)}</h3>
+      <div class="arrs"><button class="arr" type="button" id="calPrev" aria-label="Previous months"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button><button class="arr" type="button" id="calNext" aria-label="Next months"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button></div>
+    </div>
+    <div class="months" id="months"></div>
+    <div class="legend">
+      <span><i class="sel"></i><span>{t(`vos dates`,`your dates`)}</span></span>
+      <span><i class="blk"></i><span>{t(`réservé (Airbnb ou en direct)`,`booked (Airbnb or direct)`)}</span></span>
+      <span><i class="own"></i><span>{t(`bloqué par Laure`,`blocked by Laure`)}</span></span>
+      <span><i class="req"></i><span>{t(`demande en attente`,`request pending`)}</span></span>
+    </div>
+    <p class="msg" id="msg"></p>
+  </div>
+  <aside class="stay rv" style="--i:1" id="stay">
+    <h3>{t(`Votre séjour`,`Your stay`)}</h3>
+    <div class="dates">
+      <div><small>{t(`Arrivée`,`Check-in`)}</small><b id="dIn">—</b></div>
+      <div><small>{t(`Départ`,`Check-out`)}</small><b id="dOut">—</b></div>
+    </div>
+    <div class="guests"><span>{t(`Voyageurs`,`Guests`)}</span><span class="step"><button type="button" id="gMinus" aria-label="Fewer guests">−</button><span id="gN">2</span><button type="button" id="gPlus" aria-label="More guests">+</button></span></div>
+    <div id="quote"></div>
+    <a class="pill primary" href="#" id="reqBtn" aria-disabled="true"><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Demander à réserver`,`Request to book`)}</span></a>
+    <form class="req" id="reqForm" hidden>
+      <input type="text" id="fName" required placeholder="Nom / Name">
+      <input type="email" id="fMail" required placeholder="E-mail">
+      <input type="tel" id="fTel" placeholder="Téléphone / Phone">
+      <textarea id="fMsg" placeholder="Un mot sur votre groupe, vos horaires… / A word about your group, your times…"></textarea>
+      <button class="pill primary" type="submit"><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Envoyer la demande`,`Send the request`)}</span></button>
+      <p class="note">{t(`Rien n'est débité maintenant. Laure vous répond sous un jour ; si c'est oui, vous recevez un lien de paiement sécurisé.`,`Nothing is charged now. Laure replies within a day; if it is a yes, you get a secure payment link.`)}</p>
+    </form>
+    <div class="sent" id="sent" hidden></div>
+  </aside>
+</div></section>
+
+<script is:inline define:vars={{ D: prices, BLOCKS: bookings }}>
+/* runs once the whole page is parsed: the owner page adds its table and form after this component */
+function initCalendar(){
+  var MIN=7, MAXG=10, DISC=[[28,.55]];
+  var blocks=BLOCKS.slice();
+  var T={fr:{pickIn:'choisissez votre date d’arrivée',pickOut:'maintenant le départ, une semaine au moins',min:'une semaine au moins, choisissez un départ plus tard',cross:'ces dates passent sur une nuit déjà réservée',ok:'c’est libre, le prix est là',nights:'nuits',night:'nuit',disc:'remise séjour d\u2019un mois',total:'Total',empty:'Vos dates d’abord ; le prix vient ensuite, pour ce séjour précis.',dep:'Caution bloquée à l’arrivée, jamais débitée sans raison. Taxe de séjour incluse dans le total.',sentT:'Demande envoyée',sentB:'Laure vous répond sous un jour à {mail}. Les dates sont en option pour vous pendant 24 h.',guest:'voyageur',guests:'voyageurs',req:'Demande en attente',dir:'Réservation directe',own:'Bloqué',air:'Airbnb',mon:['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],dow:['L','M','M','J','V','S','D'],added:'ajouté ; les dates partent vers Airbnb au prochain import'},
+         en:{pickIn:'choose your check-in date',pickOut:'now the check-out, a week at least',min:'a week at least, choose a later check-out',cross:'those dates cross a night that is already booked',ok:'it is free, and there is your price',nights:'nights',night:'night',disc:'month-long stay discount',total:'Total',empty:'Your dates first; the price follows, for that exact stay.',dep:'Deposit held at check-in, never charged without cause. Tourist tax included in the total.',sentT:'Request sent',sentB:'Laure replies within a day at {mail}. The dates are held for you for 24 hours.',guest:'guest',guests:'guests',req:'Request pending',dir:'Direct booking',own:'Blocked',air:'Airbnb',mon:['January','February','March','April','May','June','July','August','September','October','November','December'],dow:['M','T','W','T','F','S','S'],added:'added; the dates reach Airbnb at its next import'}};
+  function L(){ return document.documentElement.getAttribute('data-lang')==='en'?'en':'fr'; }
+  function t(k){ return T[L()][k]; }
+  var today=new Date(); today.setHours(0,0,0,0);
+  function iso(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function parse(s){ var p=s.split('-'); return new Date(+p[0],+p[1]-1,+p[2]); }
+  function addD(d,n){ var x=new Date(d); x.setDate(x.getDate()+n); return x; }
+  function blockOf(s){ for(var i=0;i<blocks.length;i++){ if(s>=blocks[i].a&&s<blocks[i].b) return blocks[i]; } return null; }
+  function eur(n){ return L()==='fr'? n.toLocaleString('fr-FR')+' €' : '€'+n.toLocaleString('en-GB'); }
+  function fmt(d,long){ return d.toLocaleDateString(L()==='fr'?'fr-FR':'en-GB',long?{weekday:'short',day:'numeric',month:'long',year:'numeric'}:{weekday:'short',day:'numeric',month:'short'}); }
+  var keys=Object.keys(D).sort(), lastMonth=parse(keys[keys.length-1]); lastMonth=new Date(lastMonth.getFullYear(),lastMonth.getMonth(),1);
+  var view=new Date(today.getFullYear(),today.getMonth(),1), start=null, end=null, guests=2, sentTo=null;
+  var months=document.getElementById('months'), msg=document.getElementById('msg');
+  function say(k){ msg.textContent=k?t(k):''; }
+  function renderCal(){
+    months.innerHTML='';
+    for(var m=0;m<2;m++){
+      var first=new Date(view.getFullYear(),view.getMonth()+m,1), sec=document.createElement('div'); sec.className='month';
+      var h=document.createElement('h3'); h.textContent=(t('mon')[first.getMonth()]+' '+first.getFullYear()).toUpperCase(); sec.appendChild(h);
+      var dow=document.createElement('div'); dow.className='dow'; t('dow').forEach(function(x){ var s=document.createElement('span'); s.textContent=x; dow.appendChild(s); }); sec.appendChild(dow);
+      var days=document.createElement('div'); days.className='days';
+      var pad=(first.getDay()+6)%7; for(var p=0;p<pad;p++){ var e=document.createElement('div'); e.className='day pad'; days.appendChild(e); }
+      var n=new Date(first.getFullYear(),first.getMonth()+1,0).getDate();
+      for(var d=1;d<=n;d++){
+        var dt=new Date(first.getFullYear(),first.getMonth(),d), s=iso(dt), cell=document.createElement('button'); cell.type='button'; cell.className='day'; cell.textContent=d; cell.setAttribute('data-d',s);
+        var b=blockOf(s);
+        if(dt<=today){ cell.classList.add('past'); cell.disabled=true; }
+        else if(b){ cell.classList.add(b.src==='own'?'own':(b.src==='req'?'req':'blk')); cell.disabled=true; cell.title=(L()==='en'&&b.whoEn)?b.whoEn:b.who; }
+        else cell.classList.add('free');
+        if(start&&s===iso(start)) cell.classList.add('start');
+        if(end&&s===iso(end)) cell.classList.add('end');
+        if(start&&end&&dt>start&&dt<end) cell.classList.add('in');
+        days.appendChild(cell);
+      }
+      sec.appendChild(days); months.appendChild(sec);
+    }
+    document.getElementById('calPrev').disabled = view<=new Date(today.getFullYear(),today.getMonth(),1);
+    document.getElementById('calNext').disabled = view>=new Date(lastMonth.getFullYear(),lastMonth.getMonth()-1,1);
+  }
+  months.addEventListener('click',function(e){
+    var c=e.target.closest('.day'); if(!c||c.disabled||c.classList.contains('pad')) return;
+    var d=parse(c.getAttribute('data-d'));
+    if(!start||(start&&end)||d<=start){ start=d; end=null; say('pickOut'); }
+    else {
+      var nights=Math.round((d-start)/864e5);
+      if(nights<MIN){ say('min'); }
+      else { var x=new Date(start), clash=false; while(x<d){ if(blockOf(iso(x))){ clash=true; break; } x=addD(x,1); }
+        if(clash){ say('cross'); } else { end=d; say('ok'); } }
+    }
+    renderCal(); renderStay();
+  });
+  document.getElementById('calPrev').addEventListener('click',function(){ view=new Date(view.getFullYear(),view.getMonth()-2,1); renderCal(); });
+  document.getElementById('calNext').addEventListener('click',function(){ view=new Date(view.getFullYear(),view.getMonth()+2,1); renderCal(); });
+  document.getElementById('gMinus').addEventListener('click',function(){ guests=Math.max(1,guests-1); renderStay(); });
+  document.getElementById('gPlus').addEventListener('click',function(){ guests=Math.min(MAXG,guests+1); renderStay(); });
+  function quote(){
+    if(!start||!end) return null;
+    var nights=Math.round((end-start)/864e5), sum=0, x=new Date(start), missing=0;
+    while(x<end){ var r=D[iso(x)]; if(r&&r.p>0) sum+=r.p; else missing++; x=addD(x,1); }
+    var rate=0; for(var i=0;i<DISC.length;i++){ if(nights>=DISC[i][0]){ rate=DISC[i][1]; break; } }
+    var disc=Math.round(sum*rate);
+    return {nights:nights,sum:sum,rate:rate,disc:disc,total:sum-disc,missing:missing};
+  }
+  function renderStay(){
+    document.getElementById('dIn').textContent=start?fmt(start):'—';
+    document.getElementById('dOut').textContent=end?fmt(end):'—';
+    document.getElementById('gN').textContent=guests;
+    var q=quote(), el=document.getElementById('quote'), btn=document.getElementById('reqBtn');
+    if(!q){ el.innerHTML='<p class="empty">'+t('empty')+'</p>'; btn.setAttribute('aria-disabled','true'); return; }
+    var html='<div class="lines"><div><span>'+q.nights+' '+t('nights')+' · '+guests+' '+(guests>1?t('guests'):t('guest'))+'</span><span>'+eur(q.sum)+'</span></div>';
+    if(q.rate) html+='<div class="disc"><span>'+t('disc')+' −'+Math.round(q.rate*100)+'%</span><span>−'+eur(q.disc)+'</span></div>';
+    html+='<div class="tot"><span>'+t('total')+'</span><span>'+eur(q.total)+'</span></div></div><p class="note">'+t('dep')+'</p>';
+    el.innerHTML=html; btn.setAttribute('aria-disabled','false');
+  }
+  document.getElementById('reqBtn').addEventListener('click',function(e){ e.preventDefault(); if(this.getAttribute('aria-disabled')==='true') return; document.getElementById('reqForm').hidden=false; this.hidden=true; document.getElementById('fName').focus(); });
+  document.getElementById('reqForm').addEventListener('submit',function(e){
+    e.preventDefault(); var mail=document.getElementById('fMail').value||'…', name=document.getElementById('fName').value||'…';
+    blocks.push({a:iso(start),b:iso(end),src:'req',who:name+' · '+guests+' '+t('guests'),whoEn:name+' · '+guests+' guests'});
+    sentTo=mail; this.hidden=true; renderSent(); start=null; end=null; renderCal(); renderStay(); renderRows(); say('');
+  });
+  function renderSent(){ var s=document.getElementById('sent'); if(!sentTo){ s.hidden=true; return; } s.hidden=false; s.innerHTML='<b>'+t('sentT')+'</b>'+t('sentB').replace('{mail}',sentTo); }
+  /* owner view */
+  var rows=document.getElementById('bkRows');
+  function renderRows(){
+    if(!rows) return; var list=blocks.slice().sort(function(x,y){ return x.a<y.a?-1:1; }); rows.innerHTML='';
+    list.forEach(function(b){ var n=Math.round((parse(b.b)-parse(b.a))/864e5), tr=document.createElement('tr');
+      tr.innerHTML='<td>'+fmt(parse(b.a))+' → '+fmt(parse(b.b))+'</td><td>'+((L()==='en'&&b.whoEn)?b.whoEn:b.who)+'</td><td><span class="tag '+b.src+'">'+t(b.src)+'</span></td><td>'+n+'</td>'; rows.appendChild(tr); });
+  }
+  var af=document.getElementById('addForm'); if(af) af.addEventListener('submit',function(e){
+    e.preventDefault(); var a=document.getElementById('aIn').value, b=document.getElementById('aOut').value; if(!a||!b||b<=a) return;
+    var type=document.getElementById('aType').value, name=document.getElementById('aName').value||(type==='own'?'Laure':'—');
+    blocks.push({a:a,b:b,src:type,who:name,whoEn:name}); this.reset(); renderCal(); renderRows(); say(''); msg.textContent=name+' '+t('added');
+  });
+  renderCal(); renderStay(); renderRows(); say('pickIn');
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initCalendar); else initCalendar();
+</script>

@@ -1,0 +1,30 @@
+---
+import { t as T, urls, type Lang, type Page } from '../i18n';
+import { ARROW, PLUS, PLUS_ICON, STAR } from '../icons';
+import LangSwitch from './LangSwitch.astro';
+interface Props { lang: Lang; page: Page }
+const { lang, page } = Astro.props;
+const t = T(lang);
+const home = page === 'home' ? '' : urls.home[lang]; // anchors stay on the home page, other pages link back to it
+---
+<section class="hosts" id="hosts"><div class="wrap grid">
+  <div class="rv">
+    <h2>{t(`Laure`,`Laure`)}</h2>
+    <p class="strap">{t(`votre hôte, à la porte avec les clés`,`your host, at the door with the keys`)}</p>
+    <p class="body">{t(`J'accueille des voyageurs ici depuis cinq ans. L'arrivée se fait à partir de 17 h : je vous remets les clés, vous fais visiter la maison et réponds à vos questions. Le départ est avant 11 h.`,`I have hosted guests here for five years. Check-in is from 5 pm: I hand over the keys, show you round the house and answer anything. Check-out is by 11 am.`)}</p>
+    <div class="nums">
+      <div><b>5</b><span>{t(`ans d'accueil`,`years of hosting`)}</span></div>
+      <div><b>4.88</b><span>{t(`note moyenne`,`average rating`)}</span></div>
+      <div><b>10</b><span>{t(`personnes au plus`,`guests at most`)}</span></div>
+    </div>
+    <div class="actions">
+      <a class="pill outline" href="https://wa.me/33625462209" rel="noopener"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.8A8 8 0 1 1 8.2 19z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 1a4 4 0 0 1-2-2l1-1-1-2z"/></svg></span><span>{t(`WhatsApp Laure`,`WhatsApp Laure`)}</span></a>
+      <a class="pill outline" href="sms:+33625462209"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg></span><span>{t(`Envoyer un SMS`,`Send a text`)}</span></a>
+    </div>
+  </div>
+  <figure class="rv" style="--i:2">
+    <div class="photo"><img src="/img/67.jpg" alt="Laure in the courtyard beside her ceramics" loading="lazy"></div>
+    <figcaption>{t(`Laure`,`Laure`)}</figcaption>
+  </figure>
+</div></section>
+

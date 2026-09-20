@@ -1,0 +1,47 @@
+---
+import { t as T, urls, type Lang, type Page } from '../i18n';
+import { ARROW, PLUS, PLUS_ICON, STAR } from '../icons';
+import LangSwitch from './LangSwitch.astro';
+interface Props { lang: Lang; page: Page }
+const { lang, page } = Astro.props;
+const t = T(lang);
+const home = page === 'home' ? '' : urls.home[lang]; // anchors stay on the home page, other pages link back to it
+---
+<section class="made" id="house"><div class="wrap">
+  <div class="center rv">
+    <h2>{t(`Faite pour les longs séjours`,`Made for long stays`)}</h2>
+    <p class="strap">{t(`dix personnes, quatre chambres, et la piscine à vous`,`ten of you, four bedrooms, and the pool to yourselves`)}</p>
+    <p class="lede">{t(`Une maison de village en pierre, des terrasses privées, et tout ce qu'il faut pour se sentir chez soi.`,`A stone village house, private terraces, and everything you need to feel at home.`)}</p>
+  </div>
+  <div class="cards"><div class="track">
+    <a class="card rv" style="--i:1" href="#gallery" data-gallery="pool"><img src="/img/2.jpg" alt="The pool lengthways between stone walls and a cypress" loading="lazy"><div class="t"><h3>{t(`La piscine`,`The pool`)}</h3><p>{t(`Derrière ses propres murs, au soleil toute la journée, avec le château au-dessus.`,`Behind its own walls, in the sun all day, with the château above.`)}</p></div></a>
+    <a class="card rv" style="--i:2" href="#gallery" data-gallery="kitchen"><img src="/img/28.jpg" alt="Farmhouse kitchen with an oak dresser and round table" loading="lazy"><div class="t"><h3>{t(`La cuisine`,`The kitchen`)}</h3><p>{t(`Une cuisine de ferme avec son vaisselier et une table ronde au milieu.`,`A farmhouse kitchen with an oak dresser and a round table in the middle.`)}</p></div></a>
+    <a class="card rv" style="--i:3" href="#gallery" data-gallery="terraces"><img src="/img/31.jpg" alt="Terrace under a vine canopy with the village roofs beyond" loading="lazy"><div class="t"><h3>{t(`Les terrasses`,`The terraces`)}</h3><p>{t(`Sous la treille, dans la cour, ou face à la plaine jusqu'au Ventoux.`,`Under the vine, in the courtyard, or facing the plain all the way to Mont Ventoux.`)}</p></div></a>
+    <a class="card rv" style="--i:4" href="#gallery" data-gallery="sitting"><img src="/img/18.jpg" alt="Sitting room with deep sofas and a fireplace" loading="lazy"><div class="t"><h3>{t(`Le salon`,`The sitting room`)}</h3><p>{t(`Des canapés profonds, des livres, et des murs épais qui gardent la fraîcheur.`,`Deep sofas, books, and thick walls that keep it cool.`)}</p></div></a>
+    <a class="card rv" style="--i:4" href="#gallery" data-gallery="master"><img src="/img/34.jpg" alt="The master bedroom, with big log beams and doors onto a balcony" loading="lazy"><div class="t"><h3>{t(`La chambre principale`,`The master bedroom`)}</h3><p>{t(`Un lit king sous de grosses poutres, avec des portes sur son propre balcon.`,`A king bed under big log beams, with doors onto its own balcony.`)}</p></div></a>
+    <a class="card rv" style="--i:4" href="#gallery" data-gallery="fourposter"><img src="/img/24.jpg" alt="Bedroom with a four-poster bed under wooden beams" loading="lazy"><div class="t"><h3>{t(`Le baldaquin`,`The four-poster`)}</h3><p>{t(`Un lit à baldaquin sous les poutres, avec une armoire en pin.`,`A four-poster under the beams, with a pine wardrobe.`)}</p></div></a>
+    <a class="card rv" style="--i:4" href="#gallery" data-gallery="fireplace"><img src="/img/16.jpg" alt="The fireplace room, with a queen bed, a single bed and red quilts" loading="lazy"><div class="t"><h3>{t(`La chambre à la cheminée`,`The fireplace room`)}</h3><p>{t(`Un lit queen, un lit simple à côté, et une vieille cheminée pour le bureau.`,`A queen bed, a single beside it, and an old fireplace for the desk.`)}</p></div></a>
+    <a class="card rv" style="--i:4" href="#gallery" data-gallery="phbed"><img src="/img/46.jpg" alt="The pool house bedroom, with red gingham curtains and an iron rail" loading="lazy"><div class="t"><h3>{t(`La chambre du pool house`,`The pool house bedroom`)}</h3><p>{t(`Du vichy rouge aux fenêtres, un lit simple en plus, au-dessus de sa propre cuisine.`,`Red gingham at the windows, a single bed as well, above its own kitchen.`)}</p></div></a>
+    <a class="card rv" style="--i:4" href="#gallery" data-gallery="phkitchen"><img src="/img/9.jpg" alt="The pool house kitchen, white, with the garden through the open door" loading="lazy"><div class="t"><h3>{t(`La cuisine du pool house`,`The pool house kitchen`)}</h3><p>{t(`Une seconde cuisine avec sa porte sur le jardin, pour les déjeuners au bord de la piscine.`,`A second kitchen with its own door to the garden, for lunches by the pool.`)}</p></div></a>
+  </div></div>
+  <script is:inline>
+  (function(){
+    /* like the room-by-room row but still until touched: drags, loops, and a tap opens the card's photos */
+    var row=document.querySelector('.made .cards'); if(!row) return;
+    var track=row.querySelector('.track'); track.innerHTML+=track.innerHTML;
+    var cards=track.querySelectorAll('.card'); for(var k=cards.length/2;k<cards.length;k++){ cards[k].setAttribute('aria-hidden','true'); cards[k].tabIndex=-1; }
+    var drag=false, moved=0, sx=0, sl=0, hit=null;
+    function halfW(){ return track.scrollWidth/2; }
+    function wrap(){ var h=halfW(); if(row.scrollLeft>=h) row.scrollLeft-=h; else if(row.scrollLeft<0) row.scrollLeft+=h; }
+    row.addEventListener('pointerdown',function(e){ if(e.pointerType==='mouse'&&e.button!==0) return; drag=true; moved=0; sx=e.clientX; sl=row.scrollLeft; hit=e.target.closest?e.target.closest('.card'):null; row.classList.add('dragging'); row.setPointerCapture(e.pointerId); });
+    row.addEventListener('pointermove',function(e){ if(!drag) return; var d=e.clientX-sx; moved=Math.max(moved,Math.abs(d)); row.scrollLeft=sl-d; wrap(); });
+    function end(e){ var tap=drag&&moved<=6&&hit&&e.type==='pointerup'; drag=false; row.classList.remove('dragging'); if(tap&&window.__openGallery){ window.__openGallery(hit.getAttribute('data-gallery'),0); } hit=null; }
+    row.addEventListener('pointerup',end); row.addEventListener('pointercancel',end);
+    row.addEventListener('scroll',function(){ if(!drag) wrap(); },{passive:true});
+    row.addEventListener('dragstart',function(e){ e.preventDefault(); }); /* the cards are links, and a link's native drag would cancel ours */
+    /* a pointer tap is handled above; a keyboard Enter on a card still reaches the gallery handler */
+    row.addEventListener('click',function(e){ e.preventDefault(); if(e.detail>0) e.stopPropagation(); },true);
+  })();
+  </script>
+</div></section>
+
