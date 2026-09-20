@@ -49,15 +49,6 @@ const rooms = [
   <header class="masthead" id="top">
     <Nav lang={lang} page={page} />
   </header>
-<section class="bk-head"><div class="wrap">
-  <div class="row">
-    <div class="rv">
-      <h2>{t(`La maison`,`The house`)}</h2>
-      <p class="strap">{t(`une vieille maison de village, pièce par pièce`,`an old village house, room by room`)}</p>
-      <p class="lede">{t(`Des murs de pierre, des poutres, des terrasses à chaque étage et une piscine derrière ses propres murs. Dix personnes y dorment à l'aise.`,`Stone walls, beams, terraces on every level and a pool behind its own walls. Ten people sleep here comfortably.`)}</p>
-    </div>
-  </div>
-</div></section>
 
 <section class="facts"><div class="wrap">
   <div class="row rv">
@@ -90,18 +81,6 @@ const rooms = [
 
 <div class="band" aria-hidden="true"></div>
 
-<section class="plain-truths"><div class="wrap">
-  <div class="center rv">
-    <h2>{t(`À savoir avant de venir`,`Worth knowing before you come`)}</h2>
-    <p class="strap">{t(`les choses qu'on préfère dire tout de suite`,`the things we would rather say up front`)}</p>
-  </div>
-  <div class="grid">
-    <div class="truth rv" style="--i:1"><h3>{t(`Des escaliers partout`,`Stairs everywhere`)}</h3><p>{t(`La maison est bâtie sur une pente, à l'intérieur comme dans le village. Elle ne convient pas à une personne qui a du mal à se déplacer.`,`The house is built on a slope, inside and out in the village. It does not suit anyone who struggles with stairs.`)}</p></div>
-    <div class="truth rv" style="--i:2"><h3>{t(`La piscine, avec une décharge`,`The pool, with a waiver`)}</h3><p>{t(`Elle n'est pas surveillée : à l'arrivée, un adulte signe une décharge de responsabilité, et les enfants restent sous la garde des adultes.`,`It is not lifeguarded: at check-in one adult signs a liability waiver, and children stay in the care of the adults.`)}</p></div>
-    <div class="truth rv" style="--i:3"><h3>{t(`Trois caméras, dehors seulement`,`Three cameras, outside only`)}</h3><p>{t(`Le parking, le mur du Mazet et le passage sous le porche. Aucune à l'intérieur, ni sur les terrasses, ni autour de la piscine.`,`The car park, the Mazet wall and the passage under the porch. None inside, on the terraces or around the pool.`)}</p></div>
-  </div>
-  <p class="center" style="margin-top:2.6rem"><a class="pill primary" href={urls.book[lang]}><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Voir les dates`,`Check dates`)}</span></a></p>
-</div></section>
 
   <Footer lang={lang} page={page} />
   <Lightbox />

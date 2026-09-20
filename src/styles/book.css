@@ -33,6 +33,8 @@
 .step button{width:1.8rem;height:1.8rem;border-radius:50%;border:1px solid var(--olive-deep);background:none;color:var(--olive-deep);cursor:pointer;font:inherit;line-height:1}
 .lines{margin:1.1rem 0 0;display:grid;gap:.5rem;font-size:.92rem}
 .lines div{display:flex;justify-content:space-between;gap:1rem}
+.stay .cta{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.stay .cta .pill{margin:0}
 .stay .note{font-size:.8rem;color:var(--ink-2);margin-top:.8rem;line-height:1.5;background:none;padding:0}
 .stay .empty{font-family:var(--ff-script);color:var(--strap-ink);font-size:1.25rem;line-height:1.35;margin:1rem 0 .4rem}
 .stay .pill{margin-top:1rem}

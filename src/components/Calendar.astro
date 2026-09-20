@@ -1,5 +1,5 @@
 ---
-import { t as T, AIRBNB, type Lang, type Page } from '../i18n';
+import { t as T, AIRBNB, WHATSAPP, type Lang, type Page } from '../i18n';
 import { ARROW } from '../icons';
 import prices from '../data/pricelabs.json';
 import bookings from '../data/bookings.json';
@@ -29,8 +29,8 @@ const t = T(lang);
     </div>
     <div class="guests"><span>{t(`Voyageurs`,`Guests`)}</span><span class="step"><button type="button" id="gMinus" aria-label="Fewer guests">−</button><span id="gN">2</span><button type="button" id="gPlus" aria-label="More guests">+</button></span></div>
     <div id="summary"></div>
-    {!owner && <a class="pill primary" href={AIRBNB} id="airBtn" aria-disabled="true" rel="noopener"><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Réserver sur Airbnb`,`Book on Airbnb`)}</span></a>}
-    {!owner && <p class="note">{t(`Le bouton ouvre notre annonce Airbnb avec vos dates et votre nombre de voyageurs. Le prix exact, le paiement, la caution et les conditions d'annulation sont là-bas.`,`The button opens our Airbnb listing with your dates and party size filled in. The exact price, payment, deposit and cancellation terms are there.`)}</p>}
+    {!owner && <div class="cta"><a class="pill primary" href={AIRBNB} id="airBtn" aria-disabled="true" rel="noopener"><span class="dot"><Fragment set:html={ARROW} /></span><span>{t(`Réserver sur Airbnb`,`Book on Airbnb`)}</span></a><a class="pill outline" href={WHATSAPP} id="waBtn" rel="noopener"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.8A8 8 0 1 1 8.2 19z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 1a4 4 0 0 1-2-2l1-1-1-2z"/></svg></span><span>{t(`Message WhatsApp`,`Message on WhatsApp`)}</span></a></div>}
+    {!owner && <p class="note">{t(`Le bouton Airbnb ouvre notre annonce avec vos dates et votre nombre de voyageurs. Le prix exact, le paiement, la caution et les conditions d'annulation sont là-bas. Les prix se discutent : envoyez-nous un message sur WhatsApp avant de réserver.`,`The Airbnb button opens our listing with your dates and party size filled in. The exact price, payment, deposit and cancellation terms are there. Prices are negotiable: send us a message on WhatsApp before you book.`)}</p>}
   </aside>
 </div></section>
 
